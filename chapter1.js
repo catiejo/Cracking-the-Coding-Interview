@@ -155,34 +155,34 @@ tests.forEach(function(test) {
 
 // 1.5 First Stab
 function isOneAway(str1, str2) {
-  var shorter, longer, i, offset, len;
-  var numberOfDifferences = 0;
+  var shorter, longer, i;
   if (str1.length > str2.length) {
     longer = str1;
     shorter = str2;
-    len = str1.length;
   } else {
     longer = str2;
     shorter = str1;
-    len = str2.length;
   }
-  if (longer - shorter > 1) {
+  if (longer.length - shorter.length > 1) {
     return false;
   }
-  for (i = 0, offset = 0; i < len; i++) {
-    if (shorter.charAt(i) != longer.charAt(i + offset)) {
-      if (shorter.charAt(i) == longer.charAt(i + offset + 1)) {
-        offset++;
+  for (i = 0; i < longer.length; i++) {
+    if (shorter.charAt(i) != longer.charAt(i)) {
+      if (longer.length == shorter.length) {
+        return (shorter.substring(i + 1) == longer.substring(i + 1))
+      } else {
+        return (shorter.substring(i) == longer.substring(i + 1));
       }
-      numberOfDifferences++;
     }
   }
-  return numberOfDifferences <= 1;
+  return true;
 }
 
 // 1.5 Tests
 console.log("***** 1.5 *****");
-var tests = [["banana", "canana"], ["abc", "def"], ["ccc", "cccc"], ["abc", "dbc"], ["abc", "abcd"]];
+var tests = [["yay", "yayay"], ["banana", "canana"], ["abc", "def"],
+  ["ccc", "cccc"], ["cccc", "caccc"], ["abcd", "aecd"],
+  ["abc", "abcd"], ["abcd", "bcd"]];
 tests.forEach(function(test) {
   console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + isOneAway(test[0], test[1]));
 });
