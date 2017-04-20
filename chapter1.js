@@ -111,3 +111,23 @@ tests.forEach(function(test) {
   console.log("\"" + test + "\": " + URLify(test));
   console.log("\"" + test + "\": " + URLify2(test));
 });
+
+// 1.4 First Stab
+function palindromePermutation(str) {
+  var map = getMap(str);
+  var numberOfOddEntries = 0
+  map.forEach(function(value, key, map) {
+    if (value % 2 != 0) {
+      numberOfOddEntries++;
+      console.log(key + " is " + value);
+    }
+  });
+  return numberOfOddEntries <= 1;
+}
+
+// 1.4 Tests
+console.log("***** 1.3 *****");
+var tests = ["Tact coa", "abc"];
+tests.forEach(function(test) {
+  console.log("\"" + test + "\": " + palindromePermutation(test));
+});
