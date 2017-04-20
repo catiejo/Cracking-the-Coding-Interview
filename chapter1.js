@@ -97,9 +97,16 @@ function URLify(str) {
   return url;
 }
 
+// 1.3 in place
+// Strings in js are apparently immutable, so there isn't a clear way to do this in-place.
+function URLify2(str) {
+  return str.replace(/ /g, "%20");
+}
+
 // 1.3 Tests
 console.log("***** 1.3 *****");
 var tests = ["hello there", "abc", " ", "", "hello  there"];
 tests.forEach(function(test) {
   console.log("\"" + test + "\": " + URLify(test));
+  console.log("\"" + test + "\": " + URLify2(test));
 });
