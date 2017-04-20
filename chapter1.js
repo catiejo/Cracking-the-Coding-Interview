@@ -124,18 +124,32 @@ function palindromePermutation(str) {
   map.forEach(function(value, key, map) {
     if (value % 2 != 0) {
       numberOfOddEntries++;
-      console.log(key + " is " + value);
-      if (numberOfOddEntries > 1) {
-        return false;
-      }
     }
   });
-  return true;
+  return numberOfOddEntries <= 1;
 }
 
+// 1.4 using Array.every
+function palindromePermutation2(str) {
+  // Remove spaces and capital letters
+  var possiblePalindrome = str.toLowerCase().replace(/ /g, "");
+  var map = getMap(possiblePalindrome);
+  var numberOfOddEntries = 0
+  var palArray = Array.from(map.values());
+  var isPalindrome = palArray.every(function(value, index, array) {
+    if (value % 2 != 0) {
+      numberOfOddEntries++;
+    }
+    return numberOfOddEntries <= 1;
+  });
+  return isPalindrome;
+}
+
+
 // 1.4 Tests
-console.log("***** 1.3 *****");
+console.log("***** 1.4 *****");
 var tests = ["Tact coa", "abc"];
 tests.forEach(function(test) {
   console.log("\"" + test + "\": " + palindromePermutation(test));
+  console.log("\"" + test + "\": " + palindromePermutation2(test));
 });
