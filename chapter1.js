@@ -145,11 +145,44 @@ function palindromePermutation2(str) {
   return isPalindrome;
 }
 
-
 // 1.4 Tests
 console.log("***** 1.4 *****");
 var tests = ["Tact coa", "abc"];
 tests.forEach(function(test) {
   console.log("\"" + test + "\": " + palindromePermutation(test));
   console.log("\"" + test + "\": " + palindromePermutation2(test));
+});
+
+// 1.5 First Stab
+function isOneAway(str1, str2) {
+  var shorter, longer, i, offset, len;
+  var numberOfDifferences = 0;
+  if (str1.length > str2.length) {
+    longer = str1;
+    shorter = str2;
+    len = str1.length;
+  } else {
+    longer = str2;
+    shorter = str1;
+    len = str2.length;
+  }
+  if (longer - shorter > 1) {
+    return false;
+  }
+  for (i = 0, offset = 0; i < len; i++) {
+    if (shorter.charAt(i) != longer.charAt(i + offset)) {
+      if (shorter.charAt(i) == longer.charAt(i + offset + 1)) {
+        offset++;
+      }
+      numberOfDifferences++;
+    }
+  }
+  return numberOfDifferences <= 1;
+}
+
+// 1.5 Tests
+console.log("***** 1.5 *****");
+var tests = [["banana", "canana"], ["abc", "def"], ["ccc", "cccc"], ["abc", "dbc"], ["abc", "abcd"]];
+tests.forEach(function(test) {
+  console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + isOneAway(test[0], test[1]));
 });
