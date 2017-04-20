@@ -50,13 +50,14 @@ tests.forEach(function(test) {
 
 // 1.2 First Stab
 function getMap(str) {
-  var charMap = {};
+  var charMap = new Map();
   var i, len, ch;
   for (i = 0, len = str.length; i < len; i++) {
     ch = str.charAt(i);
-    var count = charMap[ch];
-    count = count ? count + 1 : 1;
-    charMap[ch] = count;
+    if (!charMap.has(ch)) {
+      charMap.set(ch, 0);
+    }
+    charMap.set(ch, charMap.get(ch) + 1);
   }
   return charMap;
 }
