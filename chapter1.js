@@ -81,3 +81,25 @@ var tests = [["banana", "ananab"], ["abc", " "], ["abc123#$% ijk)(*&^", "abc"]];
 tests.forEach(function(test) {
   console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + stringsArePermutations(test[0], test[1]));
 });
+
+// 1.3 First Stab
+function URLify(str) {
+  var url = "";
+  var len, i, ch;
+  for (i = 0, len = str.length; i < len; i++) {
+    ch = str.charAt(i);
+    if (ch == ' ') {
+      url += "%20";
+    } else {
+      url += ch;
+    }
+  }
+  return url;
+}
+
+// 1.3 Tests
+console.log("***** 1.3 *****");
+var tests = ["hello there", "abc", " ", "", "hello  there"];
+tests.forEach(function(test) {
+  console.log("\"" + test + "\": " + URLify(test));
+});
