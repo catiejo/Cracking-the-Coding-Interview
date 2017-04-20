@@ -113,16 +113,24 @@ tests.forEach(function(test) {
 });
 
 // 1.4 First Stab
+// Good questions to ask with this type of question:
+// * Does case matter?
+// * Spaces don't normally count in palindromes. Do they count here?
 function palindromePermutation(str) {
-  var map = getMap(str);
+  // Remove spaces and capital letters
+  var possiblePalindrome = str.toLowerCase().replace(/ /g, "");
+  var map = getMap(possiblePalindrome);
   var numberOfOddEntries = 0
   map.forEach(function(value, key, map) {
     if (value % 2 != 0) {
       numberOfOddEntries++;
       console.log(key + " is " + value);
+      if (numberOfOddEntries > 1) {
+        return false;
+      }
     }
   });
-  return numberOfOddEntries <= 1;
+  return true;
 }
 
 // 1.4 Tests
