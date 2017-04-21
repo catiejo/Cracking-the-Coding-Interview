@@ -154,6 +154,13 @@ tests.forEach(function(test) {
 });
 
 // 1.5 First Stab
+// Things I learned in this problem:
+// * Calling charAt() with an invalid index returns the empty string
+// * substring() still works with invalid indices
+// * substring()'s end argument is optional, and defaults to the end of the string
+// * substring() is start (inclusive) to end (exclusive)
+// * substring() is start (inclusive) to end (exclusive)
+// * This algorithm is using the Levenshtein distance definition
 function isOneAway(str1, str2) {
   var shorter, longer, i;
   if (str1.length > str2.length) {
@@ -164,13 +171,16 @@ function isOneAway(str1, str2) {
     shorter = str1;
   }
   if (longer.length - shorter.length > 1) {
+    // Avoid running the loop if there's no way the strings are equal
     return false;
   }
   for (i = 0; i < longer.length; i++) {
     if (shorter.charAt(i) != longer.charAt(i)) {
       if (longer.length == shorter.length) {
+        // Treat as a character replace
         return (shorter.substring(i + 1) == longer.substring(i + 1))
       } else {
+        // Treat as a charcter insertion into the longer string
         return (shorter.substring(i) == longer.substring(i + 1));
       }
     }
