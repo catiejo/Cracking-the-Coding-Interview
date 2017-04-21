@@ -188,11 +188,37 @@ function isOneAway(str1, str2) {
   return true;
 }
 
+// 1.5 Related problem (not from the book)
+// Find the (Levenshtein) edit distance between two strings.
+function stringEditDistance(str1, str2) {
+  var shorter, longer, i;
+  if (str1.length > str2.length) {
+    longer = str1;
+    shorter = str2;
+  } else {
+    longer = str2;
+    shorter = str1;
+  }
+  for (i = 0; i < longer.length; i++) {
+    if (shorter.charAt(i) != longer.charAt(i)) {
+      if (longer.length == shorter.length) {
+        // Treat as a character replace
+        return 1 + stringEditDistance(shorter.substring(i + 1), longer.substring(i + 1))
+      } else {
+        // Treat as a charcter insertion into the longer string
+        return 1 + stringEditDistance(shorter.substring(i), longer.substring(i + 1));
+      }
+    }
+  }
+  return 0;
+}
 // 1.5 Tests
 console.log("***** 1.5 *****");
 var tests = [["yay", "yayay"], ["banana", "canana"], ["abc", "def"],
   ["ccc", "cccc"], ["cccc", "caccc"], ["abcd", "aecd"],
-  ["abc", "abcd"], ["abcd", "bcd"]];
+  ["mango", "mango"], ["cat", "cow"], ["brick", "houses"],
+  ["abc", "abcd"], ["abcd", "bcd"], ["banana", "cananb"]];
 tests.forEach(function(test) {
   console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + isOneAway(test[0], test[1]));
+  console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + stringEditDistance(test[0], test[1]));
 });
