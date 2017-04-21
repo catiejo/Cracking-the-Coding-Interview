@@ -48,6 +48,8 @@ tests.forEach(function(test) {
   console.log("\"" + test + "\": " + stringIsUnique3(test));
 });
 
+//TODO: sort characters using O(nlogn) sorting algorithm.
+
 // 1.2 First Stab
 function getMap(str) {
   var charMap = new Map();
@@ -212,6 +214,41 @@ function stringEditDistance(str1, str2) {
   }
   return 0;
 }
+
+// TODO: function that returns words (in a given dictionary) that are closest..
+// * create a try
+// * when you traverse the try, you branch out
+//     c
+//  a    o
+// b t  w
+//
+// cob -> cab, cow
+// cb -> cab
+// crow ->
+//
+// distanceLookup(trie, word, errorBudget)
+// c, cob, 1
+// a, ob, 1
+// b, b, 0 => insert cab in results
+// t, b, 0 => do nothing
+// o, ob, 1
+// w, b, 1 => insert cow in results
+//
+// c, cb, 1
+// a, b, 1
+// b, , 0 => /
+// b, b, 0 => cab
+// t, , 0 => /
+// t, b, 0 => /
+//
+// c, crow, 1
+// ...
+// o, row, 1
+// w, ow, 0 => /
+// w, row, 0 => /
+// o, ow, 0
+// w, w, 0 => cow
+
 // 1.5 Tests
 console.log("***** 1.5 *****");
 var tests = [["yay", "yayay"], ["banana", "canana"], ["abc", "def"],
