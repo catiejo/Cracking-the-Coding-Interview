@@ -259,3 +259,27 @@ tests.forEach(function(test) {
   console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + isOneAway(test[0], test[1]));
   console.log("\"" + test[0] + "\" and \"" + test[1] + "\": " + stringEditDistance(test[0], test[1]));
 });
+
+// 1.6
+// Assumption: Uppercase/lowercase are treated differently. ie: AAa becomes A2a1
+function compressString(str) {
+  var compressedString = "";
+  var i, len, count;
+  var currentChar = "";
+  for (i = 0, len = str.length + 1; i < len; i++) {
+    if (str.charAt(i) != currentChar) {
+      compressedString += (currentChar == "") ? "" : currentChar + count;
+      currentChar = str.charAt(i);
+      count = 0;
+    }
+    count++;
+  }
+  return (compressedString.length < str.length) ? compressedString : str;
+}
+
+// 1.6 Tests
+console.log("***** 1.6 *****");
+var tests = ["aaaaaaaaa", "aaabbbbcddd", "", "abc"];
+tests.forEach(function(test) {
+  console.log(`\"${test}\": ${compressString(test)}`);
+});
