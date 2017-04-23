@@ -293,22 +293,27 @@ tests.forEach(function(test) {
 //]
 function rotateImage(img) {
   var pixPos, pix, rotatedPixPos, rotatedPix, startPos, i, len;
-  for (i = 0, len = img[0].length; i < len; i++) {
+  for (i = 0, len = img[0].length; i < len - 1; i++) {
     startPos = [0, i];
     pixPos = startPos;
+    pix = img[pixPos[0]][pixPos[1]];
     do {
       rotatedPixPos = getRotatedPixPos(pixPos, len);
       var tmp = img[rotatedPixPos[0]][rotatedPixPos[1]];
-      pix = img[pixPos[0]][pixPos[1]];
-      img[rotatedPixPos[0]][rotatedPixPos[1]] = pixel;
+      img[rotatedPixPos[0]][rotatedPixPos[1]] = pix;
       pixPos = rotatedPixPos;
-      pixel = tmp;
-    } while (pixPos != startPos);
+      pix = tmp;
+    } while (!arraysAreEqual(pixPos, startPos));
   }
   return img;
 }
 function getRotatedPixPos(pixPos, imgSize) {
   return [pixPos[1], imgSize - 1 - pixPos[0]];
+}
+function arraysAreEqual(current, start) {
+  var xEqual = current[0] == start[0];
+  var yEqual = current[1] == start[1];
+  return xEqual && yEqual;
 }
 
 // 1.7 Tests
