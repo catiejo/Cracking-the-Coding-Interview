@@ -285,12 +285,13 @@ tests.forEach(function(test) {
 });
 
 // 1.7
-// Assumption: data is in form:
-// [
-// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]],
-// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]],
-// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]]
-//]
+// Assumptions:
+// * Array is square (NxN)
+// * N = 1 byte, and so N must be divisible by 4 (since a pixel is 4 bytes)
+// * Image is passed as a 2-dimensional array.
+// Things I learned in this problem:
+// * non-primitive data types are passed by reference by default, not value
+// * if you want to pass an array by value, use array.slice()
 function rotateImage(img) {
   var pixPos, pix, rotatedPixPos, rotatedPix, startPos, i, len;
   for (i = 0, len = img[0].length; i < len - 1; i++) {
