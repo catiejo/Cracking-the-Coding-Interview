@@ -287,11 +287,14 @@ tests.forEach(function(test) {
 // 1.7
 // Assumptions:
 // * Array is square (NxN)
-// * N = 1 byte, and so N must be divisible by 4 (since a pixel is 4 bytes)
+// * N = 1 pixel
 // * Image is passed as a 2-dimensional array.
 // Things I learned in this problem:
 // * non-primitive data types are passed by reference by default, not value
 // * if you want to pass an array by value, use array.slice()
+// * 4 bytes = 32 bits = an int
+
+// This solution assumes each entry is a pixel, not a byte
 function rotateImage(img) {
   var ringCount = Math.ceil(img.length / 2.0);
   var count = 0;
@@ -324,12 +327,56 @@ function arraysAreEqual(current, start) {
   return xEqual && yEqual;
 }
 
+// 1.7 using a 2D array of bytes (not pixels)
+// TODO: look into array.splice()...it's twice as slow
+function rotateImage2(img) {
+  var ringCount = getRingCount(img.length);
+  var count = 0;
+  while (count < ringCount) {
+    rotateRing2(img, count);
+    count++;
+  }
+}
+function getRingCount(length) {
+  return Math.ceil(length / 2.0);
+}
+function swapPixels(img, firstPixel, secondPixel) {
+  var tmp = img[secondPixel[0]].slice(secondPixel[1], secondPixel[1] + 4);
+  for (var i = 0; i < 4; i++) {
+    img[secondPixel[0]][secondPixel[1] + i] = img[firstPixel[0]][firstPixel[1] + i];
+    img[firstPixel[0]][firstPixel[1] + i] = tmp[i];
+  }
+}
+function rotateRing2(img, ringNumber) {
+  var pixPos, pix, rotatedPixPos, rotatedPix, startPos, i, len;
+  for (i = ringNumber, len = img.length; i < len - 1 - ringNumber; i++) {
+    var topLeftPixelPosition = [ringNumber, i];
+    var topRightPixelPosition = getRotatedPixPos(topLeftPixelPosition, len);
+    var bottomRightPixelPosition = getRotatedPixPos(topRightPixelPosition, len);
+    var bottomLeftPixelPosition = getRotatedPixPos(bottomRightPixelPosition, len);
+    swapPixels(img, topLeftPixelPosition, bottomLeftPixelPosition);
+    swapPixels(img, bottomLeftPixelPosition, bottomRightPixelPosition);
+    swapPixels(img, bottomRightPixelPosition, topRightPixelPosition);
+  }
+}
+
 // 1.7 Tests
 console.log("***** 1.7 *****");
-var twoxtwo =
-[[[1, 2, 3, 4], [5, 6, 7, 8]],
- [[9, 10, 11, 12], [13, 14, 15, 16]]];
-var rotatedTwoxTwo =
-[[[9, 10, 11, 12], [1, 2, 3, 4]],
- [[13, 14, 15, 16], [5, 6, 7, 8]]];
-console.log(`2x2 test: ${rotateImage(twoxtwo) == rotatedTwoxTwo}`);
+var simpleThree =
+  [[1, 2, 3],
+   [4, 5, 6],
+   [7, 8, 9]];
+var simpleFour =
+  [[1, 2, 3, 4],
+   [5, 6, 7, 8],
+   [9, 10, 11, 12],
+   [13, 14, 15, 16]];
+var complexFour =
+  [[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4],
+   [5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8],
+   [9, 9, 9, 9, 0, 0, 0, 0, 11, 11, 11, 11, 12, 12, 12, 12],
+   [13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16]];
+ rotateImage(simpleFour);
+ rotateImage2(complexFour);
+ console.log(`Original version: ${simpleFour}`);
+ console.log(`Better version: ${complexFour}`);
