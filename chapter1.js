@@ -283,3 +283,40 @@ var tests = ["aaaaaaaaa", "aaabbbbcddd", "", "abc"];
 tests.forEach(function(test) {
   console.log(`\"${test}\": ${compressString(test)}`);
 });
+
+// 1.7
+// Assumption: data is in form:
+// [
+// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]],
+// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]],
+// [[byte, byte, byte], [byte, byte, byte]...[byte, byte, byte]]
+//]
+function rotateImage(img) {
+  var pixPos, pix, rotatedPixPos, rotatedPix, startPos, i, len;
+  for (i = 0, len = img[0].length; i < len; i++) {
+    startPos = [0, i];
+    pixPos = startPos;
+    do {
+      rotatedPixPos = getRotatedPixPos(pixPos, len);
+      var tmp = img[rotatedPixPos[0]][rotatedPixPos[1]];
+      pix = img[pixPos[0]][pixPos[1]];
+      img[rotatedPixPos[0]][rotatedPixPos[1]] = pixel;
+      pixPos = rotatedPixPos;
+      pixel = tmp;
+    } while (pixPos != startPos);
+  }
+  return img;
+}
+function getRotatedPixPos(pixPos, imgSize) {
+  return [pixPos[1], imgSize - 1 - pixPos[0]];
+}
+
+// 1.7 Tests
+console.log("***** 1.7 *****");
+var twoxtwo =
+[[[1, 2, 3, 4], [5, 6, 7, 8]],
+ [[9, 10, 11, 12], [13, 14, 15, 16]]];
+var rotatedTwoxTwo =
+[[[9, 10, 11, 12], [1, 2, 3, 4]],
+ [[13, 14, 15, 16], [5, 6, 7, 8]]];
+console.log(`2x2 test: ${rotateImage(twoxtwo) == rotatedTwoxTwo}`);
