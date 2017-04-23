@@ -293,9 +293,17 @@ tests.forEach(function(test) {
 // * non-primitive data types are passed by reference by default, not value
 // * if you want to pass an array by value, use array.slice()
 function rotateImage(img) {
+  var ringCount = Math.ceil(img.length / 2.0);
+  var count = 0;
+  while (count < ringCount) {
+    rotateRing(img, count);
+    count++;
+  }
+}
+function rotateRing(img, ringNumber) {
   var pixPos, pix, rotatedPixPos, rotatedPix, startPos, i, len;
-  for (i = 0, len = img[0].length; i < len - 1; i++) {
-    startPos = [0, i];
+  for (i = ringNumber, len = img[0].length; i < len - 1 - ringNumber; i++) {
+    startPos = [ringNumber, i];
     pixPos = startPos;
     pix = img[pixPos[0]][pixPos[1]];
     do {
@@ -306,7 +314,6 @@ function rotateImage(img) {
       pix = tmp;
     } while (!arraysAreEqual(pixPos, startPos));
   }
-  return img;
 }
 function getRotatedPixPos(pixPos, imgSize) {
   return [pixPos[1], imgSize - 1 - pixPos[0]];
