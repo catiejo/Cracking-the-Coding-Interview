@@ -380,3 +380,69 @@ var complexFour =
  rotateImage2(complexFour);
  console.log(`Original version: ${simpleFour}`);
  console.log(`Better version: ${complexFour}`);
+
+ // 1.8
+function findCoordinates(coord, M, N) {
+  var coords = [];
+  for (var i = 0; i < M; i++) {
+    coords.push([i, coord[1]]);
+  }
+  for (i = 0; i < N; i++) {
+    coords.push([coord[0], i]);
+  }
+  return coords;
+}
+
+function zeroMatrix(matrix) {
+  var coordSet = new Set();
+  var M = matrix[0].length;
+  var N = matrix.length;
+  for (var y = 0; y < N; y++) {
+    for (var x = 0; x < M; x++) {
+      if (matrix[x][y] == 0) {
+        var coords = findCoordinates([x, y], M, N);
+        coordSet.addAll(coords);
+      }
+    }
+  }
+  foreach (var coord in coordSet) {
+    matrix[coord[0]][coord[1]] = 0;
+  }
+}
+
+// 1.8 Tests
+function arraysAreEqual(a1, a2) {
+  if (a1.length != a2.length) {
+    return false;
+  }
+  for (var i = 0; i < a1.length; i++) {
+    if (a1[i] != a2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+var initial =
+[
+  [1, 1, 0],
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1]
+];
+
+var expected =
+[
+  [0, 0, 0],
+  [1, 0, 0],
+  [0, 0, 0],
+  [1, 0, 0]
+];
+
+var actual = zeroMatrix(initial);
+var areEqual = arraysAreEqual(actual, expected);
+console.log(`3x3 test: ${areEqual}`);
+if (!areEqual) {
+  console.log(`actual: \n ${actual}`);
+  console.log(`expected: \n ${expected}`);
+}
