@@ -381,34 +381,33 @@ var complexFour =
  console.log(`Original version: ${simpleFour}`);
  console.log(`Better version: ${complexFour}`);
 
- // 1.8
-function findCoordinates(coord, M, N) {
-  var coords = [];
+// 1.8
+// Things I learned in this problem:
+// * Remember indexing arrays is [y][x] not [x][y]
+// * Array equality is determined by pointers, not values, so you can't use
+//   Set() for coordinates (arrays of length 2).
+function setZeros(zero, matrix) {
+  var M = matrix[0].length, N = matrix.length;
   for (var i = 0; i < M; i++) {
-    coords.push([i, coord[1]]);
+    matrix[zero[1]][i] = 0;
   }
   for (i = 0; i < N; i++) {
-    coords.push([coord[0], i]);
+    matrix[i][zero[0]] = 0;
   }
-  return coords;
 }
-
 function zeroMatrix(matrix) {
-  var coordSet = new Set();
+  var zeros = [];
   var M = matrix[0].length;
   var N = matrix.length;
   for (var y = 0; y < N; y++) {
     for (var x = 0; x < M; x++) {
       if (matrix[y][x] == 0) {
-        var coords = findCoordinates([x, y], M, N);
-        coords.forEach(function (coordinate) {
-          coordSet.add(coordinate);
-        });
+        zeros.push([x, y]);
       }
     }
   }
-  coordSet.forEach(function (key, value, set) {
-    matrix[value[1]][value[0]] = 0;
+  zeros.forEach(function (zero) {
+    setZeros(zero, matrix);
   });
   return matrix;
 }
