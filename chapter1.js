@@ -412,6 +412,38 @@ function zeroMatrix(matrix) {
   return matrix;
 }
 
+// 1.8 boolean optimization
+function getBooleanMatrix(size) {
+  var matrix = [];
+  for (var i = 0; i < size; i++) {
+    matrix.push(false);
+  }
+  return matrix;
+}
+function zeroMatrix2(matrix) {
+  var M = matrix[0].length;
+  var N = matrix.length;
+  var rowMatrix = getBooleanMatrix(M);
+  var columnMatrix = getBooleanMatrix(N);
+  for (var y = 0; y < N; y++) {
+    for (var x = 0; x < M; x++) {
+      if (matrix[y][x] == 0) {
+        rowMatrix[x] = true;
+        columnMatrix[y] = true;
+      }
+    }
+  }
+  for (var y = 0; y < N; y++) {
+    for (var x = 0; x < M; x++) {
+      if (rowMatrix[x] == true || columnMatrix[y] == true) {
+        matrix[y][x] = 0
+      }
+    }
+  }
+  return matrix;
+}
+
+
 // 1.8 Tests
 function arraysAreEqual(a1, a2) {
 if (a1.length != a2.length || a1[0].length != a2[0].length) {
@@ -425,6 +457,19 @@ for (var i = 0; i < a1.length; i++) {
   }
 }
 return true;
+}
+function cloneArray(a) {
+  var M = a[0].length;
+  var N = a.length;
+  var aClone = new Array(N);
+  aClone[2] = "hello";
+  for (var y = 0; y < N; y++) {
+    aClone[y] = new Array(M);
+    for (var x = 0; x < M; x++) {
+      aClone[y][x] = a[y][x];
+    }
+  }
+  return aClone;
 }
 
 var initial =
@@ -443,10 +488,13 @@ var expected =
   [1, 0, 0]
 ];
 
-var actual = zeroMatrix(initial);
-var areEqual = arraysAreEqual(actual, expected);
-console.log(`3x3 test: ${areEqual}`);
-if (!areEqual) {
-  console.log(`actual: \n ${actual}`);
-  console.log(`expected: \n ${expected}`);
-}
+console.log("***** 1.8 *****");
+var results = [zeroMatrix(cloneArray(initial)), zeroMatrix2(cloneArray(initial))];
+results.forEach(function(result) {
+  var areEqual = arraysAreEqual(result, expected);
+  console.log(`3x3 test: ${areEqual}`);
+  if (!areEqual) {
+    console.log(`result: \n ${result}`);
+    console.log(`expected: \n ${expected}`);
+  }
+});
