@@ -501,15 +501,11 @@ results.forEach(function(result) {
 
 // 1.9
 function checkIfRotation(str1, str2) {
-  if (str1.length != str2.length) {
-    return false;
-  }
-  str1 += str1;
-  return str2.isSubstring(str1);
+  return str1.length == str2.length && str1.concat(str1).includes(str2);
 }
 
 console.log("***** 1.9 *****");
-var tests = [["waterbottle", "erbottlewat"], ["abby", "baby"], ["ban", "banana"]];
+var tests = [["waterbottle", "erbottlewat"], ["erbottlewat", "waterbottle"], ["abby", "baby"], ["ban", "banana"], ["kitty", "kitty"]];
 tests.forEach(function (test) {
   console.log(`${test[0]} and ${test[1]}: ${checkIfRotation(test[0], test[1])}`);
 })
