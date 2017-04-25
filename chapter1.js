@@ -412,15 +412,17 @@ function zeroMatrix(matrix) {
 
 // 1.8 Tests
 function arraysAreEqual(a1, a2) {
-  if (a1.length != a2.length) {
-    return false;
-  }
-  for (var i = 0; i < a1.length; i++) {
-    if (a1[i] != a2[i]) {
+if (a1.length != a2.length || a1[0].length != a2[0].length) {
+  return false;
+}
+for (var i = 0; i < a1.length; i++) {
+  for (var j = 0; j < a1[0].length; j++) {
+    if (a1[i][j] != a2[i][j]) {
       return false;
     }
   }
-  return true;
+}
+return true;
 }
 
 var initial =
