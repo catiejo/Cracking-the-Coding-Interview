@@ -498,3 +498,18 @@ results.forEach(function(result) {
     console.log(`expected: \n ${expected}`);
   }
 });
+
+// 1.9
+function checkIfRotation(str1, str2) {
+  if (str1.length != str2.length) {
+    return false;
+  }
+  str1 += str1;
+  return str2.isSubstring(str1);
+}
+
+console.log("***** 1.9 *****");
+var tests = [["waterbottle", "erbottlewat"], ["abby", "baby"], ["ban", "banana"]];
+tests.forEach(function (test) {
+  console.log(`${test[0]} and ${test[1]}: ${checkIfRotation(test[0], test[1])}`);
+})
