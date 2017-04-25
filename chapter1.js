@@ -399,15 +399,18 @@ function zeroMatrix(matrix) {
   var N = matrix.length;
   for (var y = 0; y < N; y++) {
     for (var x = 0; x < M; x++) {
-      if (matrix[x][y] == 0) {
+      if (matrix[y][x] == 0) {
         var coords = findCoordinates([x, y], M, N);
-        coordSet.addAll(coords);
+        coords.forEach(function (coordinate) {
+          coordSet.add(coordinate);
+        });
       }
     }
   }
-  foreach (var coord in coordSet) {
-    matrix[coord[0]][coord[1]] = 0;
-  }
+  coordSet.forEach(function (key, value, set) {
+    matrix[value[1]][value[0]] = 0;
+  });
+  return matrix;
 }
 
 // 1.8 Tests
