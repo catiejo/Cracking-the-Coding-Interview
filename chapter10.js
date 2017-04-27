@@ -3,14 +3,8 @@ function sortedMerge(a1, a2) {
   var ptr1 = findLength(a1) - 1, ptr2 = findLength(a2) - 1;
   var endPtr = ptr1 + ptr2 + 1;
   var sortedValue;
-  while (endPtr >= 0) {
-    if (ptr1 < 0) {
-      sortedValue = a2[ptr2];
-      ptr2--;
-    } else if (ptr2 < 0) {
-      sortedValue = a1[ptr1];
-      ptr1--;
-    } else if (a1[ptr1] > a2[ptr2]) {
+  while (ptr2 >= 0) {
+    if (a1[ptr1] > a2[ptr2]) {
       sortedValue = a1[ptr1];
       ptr1--;
     } else {
