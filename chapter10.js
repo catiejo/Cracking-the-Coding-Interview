@@ -43,14 +43,12 @@ tests.forEach(function (test, index, array) {
 });
 
 function arraysAreEqual(a1, a2) {
-if (a1.length != a2.length || a1[0].length != a2[0].length) {
+if (a1.length != a2.length) {
   return false;
 }
 for (var i = 0; i < a1.length; i++) {
-  for (var j = 0; j < a1[0].length; j++) {
-    if (a1[i][j] != a2[i][j]) {
-      return false;
-    }
+  if (a1[i] != a2[i]) {
+    return false;
   }
 }
 return true;
