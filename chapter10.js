@@ -30,7 +30,9 @@ var test2 = [[1, 3, 4, null, null, null, null], [5, 6, 9, 10, null], [1, 3, 4, 5
 var test3 = [[5, 6, 7, 8, null, null, null, null], [1, 2, 3, 4], [1, 2, 3, 4, 5, 6, 7, 8]];
 var test4 = [[1, 3, 5, 7, null, null, null, null], [2, 4, 6, 8], [1, 2, 3, 4, 5, 6, 7, 8]];
 var test5 = [[1, 2, 3, 4, null, null, null, null], [1, 2, 3, 4], [1, 1, 2, 2, 3, 3, 4, 4]];
-var tests = [test1, test2, test3, test4];
+var test6 = [[1, 2, 3, 4, null, null, null, null, null, null], [1, 2, 3, 4], [1, 1, 2, 2, 3, 3, 4, 4, null, null]];
+var test7 = [[1, null], [2], [1, 2]];
+var tests = [test1, test2, test3, test4, test5, test6, test7];
 tests.forEach(function (test, index, array) {
   sortedMerge(test[0], test[1]);
   var result = arraysAreEqual(test[0], test[2]);
