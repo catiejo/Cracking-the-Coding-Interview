@@ -14,8 +14,15 @@ Node.prototype.delete = function () {
   }
 }
 
-Node.prototype.setNext = function(next) {
-  this.next = next;
+Node.prototype.equals = function (node) {
+  return this.data = node.data;
+}
+
+Node.prototype.log = function(name) {
+  console.log(`Node: ${name}`);
+  console.log(`--data = ${this.data}`);
+  console.log(`--prev = ${this.prev}`);
+  console.log(`--next = ${this.next}`);
 }
 
 function removeDupes(node) {
@@ -39,30 +46,19 @@ function listsAreEqual(node1, node2) {
   var runner1 = node1;
   var runner2 = node2;
   while (runner1 != null) {
-    if (runner2 == null || !nodesAreEqual(runner1, runner2)) {
-      logNode("Runner1", runner1);
-      logNode("Runner2", runner2);
+    if (runner2 == null || !runner1.equals(runner2)) {
+      runner1.log("Runner1");
+      if (runner2 != null) {
+        runner2.log("Runner2");
+      } else {
+        console.log("Node: Runner2 is null!");
+      }
       return false;
     }
     runner1 = runner1.next;
     runner2 = runner2.next;
   }
   return true;
-}
-
-function nodesAreEqual(n1, n2) {
-  return n1.data == n2.data;
-}
-
-function logNode(name, node) {
-  console.log(`Node: ${name}`);
-  if (node == null) {
-    console.log(`--is null.`);
-    return;
-  }
-  console.log(`--data = ${node.data}`);
-  console.log(`--prev = ${node.prev}`);
-  console.log(`--next = ${node.next}`);
 }
 
 function makeNodesFromArray(a) {
@@ -78,14 +74,15 @@ function makeNodesFromArray(a) {
   return node;
 }
 
-var test1 = [makeNodesFromArray([1, 2, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])];
-var test2 = [makeNodesFromArray([1, 1, 1, 1]), makeNodesFromArray([1])];
-var test3 = [makeNodesFromArray([1, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])];
-var test4 = [makeNodesFromArray([]), makeNodesFromArray([])];
-var test5 = [makeNodesFromArray([1, 2, 3, 4, 4, 4, 4, 4]), makeNodesFromArray([1, 2, 3, 4])];
-var tests = [test1, test2, test3, test4, test5];
+var tests =
+[
+  [makeNodesFromArray([1, 2, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])],
+  [makeNodesFromArray([1, 1, 1, 1]), makeNodesFromArray([1])],
+  [makeNodesFromArray([1, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])],
+  [makeNodesFromArray([]), makeNodesFromArray([])],
+  [makeNodesFromArray([1, 2, 3, 4, 4, 4, 5, 4, 1, 3, 3, 2]), makeNodesFromArray([1, 2, 3, 4, 5])]
+]
 tests.forEach(function (test, index, array) {
-  removeDupes(test[0]);
-  var result = listsAreEqual(test[0], test[1]);
+  var result = listsAreEqual(removeDupes(test[0]), test[1]);
   console.log(`test${index + 1}: ${result}`);
 });
