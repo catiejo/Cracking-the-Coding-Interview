@@ -1,18 +1,23 @@
 // 2.1
-Node = {
-  var data;
-  var next;
-  var prev;
+function Node(data, prev, next) {
+  this.data = data;
+  this.prev = prev;
+  this.next = next;
 }
 
-function Node.prototype.delete() {
+Node.prototype.delete = function () {
   if (this.prev != null) {
     this.prev.next = this.next;
   }
-  if (this.next != null {
+  if (this.next != null) {
     this.next.prev = this.prev;
   }
 }
+
+Node.prototype.setNext = function(next) {
+  this.next = next;
+}
+
 function removeDupes(node) {
   var check, runner;
   check = node;
