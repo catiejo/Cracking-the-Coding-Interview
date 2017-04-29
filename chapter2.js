@@ -1,47 +1,69 @@
-// 2.1
-function TwoWayNode(data, prev, next) {
-  this.data = data;
-  this.prev = prev;
-  this.next = next;
+/**************************HELPERS + CLASSES**************************/
+class Node {
+  constructor (data, next) {
+    this.data = data;
+    this.next = next;
+  }
 }
 
-TwoWayNode.prototype.delete = function () {
-  if (this.prev != null) {
-    this.prev.next = this.next;
-  }
+Node.prototype.equals = function (node) {
+  return this.data == node.data;
+}
+
+Node.prototype.log = function(name) {
+  console.log(`${name} | data = ${this.data}`);
+}
+
+Node.prototype.deleteNext = function() {
   if (this.next != null) {
-    this.next.prev = this.prev;
+    this.next = this.next.next;
   }
 }
 
-TwoWayNode.prototype.equals = function (node) {
-  return this.data = node.data;
+class LinkedList {
+  constructor (head) {
+    this.head = head;
+    this.end = head;
+  }
 }
 
-TwoWayNode.prototype.log = function(name) {
-  console.log(`Node: ${name}`);
-  console.log(`--data = ${this.data}`);
-  console.log(`--prev = ${this.prev}`);
-  console.log(`--next = ${this.next}`);
+LinkedList.prototype.add = function (node) {
+  this.end.next = node;
+  this.end = this.end.next;
 }
 
-function removeDupes(node) {
-  var check, runner;
-  check = node;
-  while (check != null) {
-    runner = check.next;
-    while (runner != null) {
-      if (check.data == runner.data) {
-        runner.delete();
+LinkedList.prototype.equals = function(list) {
+  var runner1 = this.head;
+  var runner2 = list.head;
+  while (runner1 != null || runner2 != null) {
+    if (runner2 == null || runner1 == null || !runner1.equals(runner2)) {
+      if (runner1 != null) {
+        runner1.log("Runner1");
+      } else {
+        console.log("Node: Runner1 is null!");
       }
-      runner = runner.next;
+      if (runner2 != null) {
+        runner2.log("Runner2");
+      } else {
+        console.log("Node: Runner2 is null!");
+      }
+      return false;
     }
-    check = check.next;
+    runner1 = runner1.next;
+    runner2 = runner2.next;
   }
-  return node; //optional
+  return true;
 }
 
-// 2.1 Tests
+LinkedList.createFromArray = function (a) {
+  var node, nextNode = null, lastIndex = a.length - 1;
+  for (var i = a.length - 1; i >= 0; i--) {
+    node = new Node(a[i], nextNode);
+    nextNode = node;
+  }
+  return new LinkedList(node);
+}
+
 function listsAreEqual(node1, node2) {
   var runner1 = node1;
   var runner2 = node2;
@@ -64,82 +86,75 @@ function listsAreEqual(node1, node2) {
   }
   return true;
 }
+/*********************************************************************/
 
-function makeNodesFromArray(a) {
-  var node;
-  var nextNode = null;
-  a.forEach(function(data) {
-    node = new TwoWayNode(data, null, nextNode);
-    if (nextNode != null) {
-      nextNode.prev = node;
+// 2.1
+function removeDupes(list) {
+  var check = list.head, runner, runnerUp;
+  while (check != null) {
+    runner = check;
+    while (runner.next != null) {
+      if (check.data == runner.next.data) {
+        runner.deleteNext();
+      } else {
+        // Only move to next node if it's not a duplicate.
+        runner = runner.next;
+      }
     }
-    nextNode = node;
-  });
-  return node;
+    check = check.next;
+  }
+  return list;
 }
 
+// 2.1 Tests
 console.log("***** 2.1 *****");
 var tests1 =
 [
-  [makeNodesFromArray([1, 2, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])],
-  [makeNodesFromArray([1, 1, 1, 1]), makeNodesFromArray([1])],
-  [makeNodesFromArray([1, 2, 3, 4]), makeNodesFromArray([1, 2, 3, 4])],
-  [makeNodesFromArray([]), makeNodesFromArray([])],
-  [makeNodesFromArray([1, 2, 3, 4, 4, 4, 5, 4, 1, 3, 3, 2]), makeNodesFromArray([1, 2, 3, 4, 5])]
+  [LinkedList.createFromArray([1, 2, 2, 3, 4]), LinkedList.createFromArray([1, 2, 3, 4])],
+  [LinkedList.createFromArray([1, 1, 1, 1]), LinkedList.createFromArray([1])],
+  [LinkedList.createFromArray([1, 2, 3, 4]), LinkedList.createFromArray([1, 2, 3, 4])],
+  [LinkedList.createFromArray([]), LinkedList.createFromArray([])],
+  [LinkedList.createFromArray([1, 2, 3, 4, 4, 4, 5, 4, 1, 3, 3, 2]), LinkedList.createFromArray([1, 2, 3, 4, 5])]
 ]
 tests1.forEach(function (test, index, array) {
-  var result = listsAreEqual(removeDupes(test[0]), test[1]);
-  console.log(`test${index + 1}: ${result}`);
+  var result = removeDupes(test[0]).equals(test[1]);
+  console.log(`2.1 test${index + 1}: ${result}`);
 });
 
 // 2.5
-function OneWayNode (data, next) {
-  this.data = data;
-  this.next = next;
-}
-
-OneWayNode.prototype.equals = function (node) {
-  return this.data = node.data;
-}
-
-OneWayNode.prototype.log = function(name) {
-  console.log(`Node: ${name}`);
-  console.log(`--data = ${this.data}`);
-  console.log(`--next = ${this.next}`);
-}
-
 function sumList(num1, num2) {
-  var answer = new OneWayNode("start", null);
-  var answerHead = answer;
-  var sum, carry = 0, runner1 = num1, runner2 = num2;
+  var answer = new LinkedList(new Node(0, null));
+  var sum, carry = 0, runner1 = num1.head, runner2 = num2.head;
   while (runner1 != null || runner2 != null || carry != 0) {
-    sum = (runner1 == null ? 0 : runner1.data) + (runner2 == null ? 0 : runner2.data) + carry;
-    answer.next = new OneWayNode(sum % 10, null);
-    answer = answer.next;
+    var value1 = 0, value2 = 0;
+    if (runner1 != null) {
+      value1 = runner1.data;
+      runner1 = runner1.next;
+    }
+    if (runner2 != null) {
+      value2 = runner2.data;
+      runner2 = runner2.next;
+    }
+    sum = value1 + value2 + carry;
+    answer.add(new Node(sum % 10, null));
     carry = Math.floor(sum/10.0);
   }
-  return answerHead.next;
+  answer.head = answer.head.next;
+  return answer;
 }
 
-function makeOneWayNodesFromArray(a) {
-  var node;
-  var nextNode = null;
-  a.forEach(function(data) {
-    node = new OneWayNode(data, nextNode);
-    nextNode = node;
-  });
-  return node;
-}
-
+// 2.5 Tests
 console.log("***** 2.5 *****");
 var tests5 =
 [
-  [makeOneWayNodesFromArray([7, 1, 6]), makeOneWayNodesFromArray([5, 9, 2]), makeOneWayNodesFromArray([2, 1, 9])],
-  [makeOneWayNodesFromArray([7, 1, 6]), makeOneWayNodesFromArray([5, 9, 4]), makeOneWayNodesFromArray([2, 1, 1, 1])],
-  [makeOneWayNodesFromArray([2, 1, 9]), makeOneWayNodesFromArray([0]), makeOneWayNodesFromArray([2, 1, 9])]
+  [LinkedList.createFromArray([7, 1, 6]), LinkedList.createFromArray([5, 9, 2]), LinkedList.createFromArray([2, 1, 9])],
+  [LinkedList.createFromArray([7, 1, 6]), LinkedList.createFromArray([5, 9, 4]), LinkedList.createFromArray([2, 1, 1, 1])],
+  [LinkedList.createFromArray([2, 1, 9]), LinkedList.createFromArray([0]), LinkedList.createFromArray([2, 1, 9])],
+  [LinkedList.createFromArray([9, 9, 9]), LinkedList.createFromArray([9, 9, 9]), LinkedList.createFromArray([8, 9, 9, 1])],
+  [LinkedList.createFromArray([0]), LinkedList.createFromArray([0]), LinkedList.createFromArray([0])]
 ]
 tests5.forEach(function (test, index, array) {
   var answer = sumList(test[0], test[1]);
-  var result = listsAreEqual(answer, test[2]);
-  console.log(`test${index + 1}: ${result}`);
+  var result = answer.equals(test[2]);
+  console.log(`2.5 test${index + 1}: ${result}`);
 });
