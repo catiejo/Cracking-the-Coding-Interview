@@ -59,7 +59,7 @@ LinkedList.prototype.equals = function(list) {
 }
 
 LinkedList.createFromArray = function (a) {
-  var node, nextNode = null, lastIndex = a.length - 1;
+  var node = new Node(null, null), nextNode = null, lastIndex = a.length - 1;
   for (var i = a.length - 1; i >= 0; i--) {
     node = new Node(a[i], nextNode);
     nextNode = node;
