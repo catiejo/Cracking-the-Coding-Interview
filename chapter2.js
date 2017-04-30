@@ -133,6 +133,13 @@ function sumList(num1, num2) {
   answer.head = answer.head.next;
   return answer;
 }
+/*
+To create sumList for in the reverse order (100 --> 1>0>0), there are two approaches
+I've thought about:
+1) reverse the arrays, call my function, reverse the output
+2) convert the arrays to numbers (sum = (previous sum x 10) + next number), add them,
+   and then convert that number to a linked list (FLorent suggested this one)
+*/
 
 // 2.5 Tests
 console.log("***** 2.5 *****");
