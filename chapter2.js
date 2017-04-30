@@ -67,27 +67,15 @@ LinkedList.createFromArray = function (a) {
   return new LinkedList(node);
 }
 
-function listsAreEqual(node1, node2) {
-  var runner1 = node1;
-  var runner2 = node2;
-  while (runner1 != null || runner2 != null) {
-    if (runner2 == null || runner1 == null || !runner1.equals(runner2)) {
-      if (runner1 != null) {
-        runner1.log("Runner1");
-      } else {
-        console.log("Node: Runner1 is null!");
-      }
-      if (runner2 != null) {
-        runner2.log("Runner2");
-      } else {
-        console.log("Node: Runner2 is null!");
-      }
-      return false;
-    }
-    runner1 = runner1.next;
-    runner2 = runner2.next;
+LinkedList.prototype.toString = function () {
+  var string = "";
+  var runner = this.head;
+  while (runner != null) {
+    string += runner.data + " --> ";
+    runner = runner.next;
   }
-  return true;
+  string += "null";
+  return string;
 }
 /*********************************************************************/
 
