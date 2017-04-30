@@ -24,6 +24,9 @@ class LinkedList {
   constructor (head) {
     this.head = head;
     this.end = head;
+    while (this.end.next != null) {
+      this.end = this.end.next;
+    }
   }
 }
 
