@@ -68,3 +68,17 @@ function factorial(number) {
     return number * factorial(number - 1);
   }
 }
+
+tests =
+[
+  [[3, 3, 4, 6], 7],
+  [[3, 3, 3, 3, 4, 6, 0, 2, 2], 6],
+  [[3, 3, 3, 3, 4, 6, 8, -2, 2], 6],
+  [[0, 0, 0, 0], 1],
+  [[-1, 1, 0, 5, 6, 7], 0]
+]
+tests.forEach( function (test) {
+  console.log(`The array is: ${test[0]}`);
+  console.log(`The sum is: ${test[1]}`);
+  printAllPairs(test[0], test[1]);
+});
