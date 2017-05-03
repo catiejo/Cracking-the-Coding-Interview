@@ -24,7 +24,7 @@ tests.forEach( function (test, index, array) {
 });
 
 // 16.24
-function printAllPairs(a) {
+function printAllPairs(a, sum) {
   var complement, map = new Map(), printNum = 0;
   a.forEach(function (num) {
       if (!map.has(num)) {
@@ -33,14 +33,38 @@ function printAllPairs(a) {
       map.set(num, map.get(num) + 1);
   });
   map.forEach( function (numCount, num, numMap) {
-    complement = 7 - num;
-    if (num < complement && map.has(complement)) {
+    complement = sum - num;
+    printNum = 0;
+    if (num == complement) {
+      printNum = getNumCombinations(numCount, 2);
+    } else if (num < complement && map.has(complement)) {
       printNum = numCount * map.get(complement);
-      for (var i = 0; i < printNum; i++) {
-        console.log(`${num} + ${complement} = 7`);
-      }
+    }
+    for (var i = 0; i < printNum; i++) {
+      console.log(`${num} + ${complement} = ${sum}`);
     }
   });
 }
+
+function getNumCombinations(n, r) {
+  if (n < r) {
+    return 0;
+  }
+  var count = 0, numCombinations = 1;
+  while ((n - count) > r) {
+    numCombinations *= n - count;
+    count++;
+  }
+  numCombinations /= factorial(r);
+  return numCombinations;
+}
+
+function factorial(number) {
+  if (number == 0) {
+    return 1;
+  } else if (number < 0) {
+    return undefined;
+  } else {
+    return number * factorial(number - 1);
   }
 }
