@@ -25,20 +25,22 @@ tests.forEach( function (test, index, array) {
 
 // 16.24
 function printAllPairs(a) {
-  var complement, map = new HashMap(), printNum = 0;
+  var complement, map = new Map(), printNum = 0;
   a.forEach(function (num) {
-      if (!map.has(num) {
+      if (!map.has(num)) {
         map.set(num, 0);
       }
       map.set(num, map.get(num) + 1);
-  }
-  map.keys().forEach( function (num) {
+  });
+  map.forEach( function (numCount, num, numMap) {
     complement = 7 - num;
-    if (num < complement && map.has(complement) {
-      printNum = map.get(num) * map.get(complement);
+    if (num < complement && map.has(complement)) {
+      printNum = numCount * map.get(complement);
       for (var i = 0; i < printNum; i++) {
         console.log(`${num} + ${complement} = 7`);
       }
     }
+  });
+}
   }
 }
