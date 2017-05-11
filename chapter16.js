@@ -1,3 +1,33 @@
+//16.10
+function findPopulationBoom(people) {
+  var dateMap = new HashMap();
+  var maxPop = 0, boomRange = [], curPop = 0, curRange;
+  people.forEach( function (person) {
+    if (!dateMap.has(person.birth)) {
+      dateMap.set(person.birth, 0);
+    }
+    if (!dateMap.has(person.death + 1)) {
+      dateMap.set(person.death + 1, 0);
+    }
+    dateMap.set(person.birth, dateMap.get(person.birth) + 1);
+    dateMap.set(person.death + 1, dateMap.get(person.death + 1) + 1);
+
+  }
+  var timeline = sort(Array.from(dateMap.keys()));
+  for (var i = 0; i < timeline.length; i++) {
+    curPop += dateMap.get(timeline[i]);
+    if (curPop > maxPop) {
+      maxPop = curPop;
+      boomRange = 0;
+    }
+    if (curPop == maxPop) {
+      curRange = [timeline[i], timeline[i + 1 >= timeline.length ? i : i + 1]];
+      boomRange.add(curRange);
+    }
+  }
+  return boomRange;
+}
+
 // 16.17
 function maxSum(array) {
   var curSum = 0, maxSum = 0;
