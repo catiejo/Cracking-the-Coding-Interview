@@ -1,7 +1,14 @@
-//16.10
+// 16.10
+class Person {
+  constructor (birth, death) {
+    this.birth = birth;
+    this.death = death;
+  }
+}
+
 function findPopulationBoom(people) {
-  var dateMap = new HashMap();
-  var maxPop = 0, boomRange = [], curPop = 0, curRange;
+  var dateMap = new Map();
+  var maxPop = 0, boomRange = [], curPop = 0, curRange, isNewRange = true;
   people.forEach( function (person) {
     if (!dateMap.has(person.birth)) {
       dateMap.set(person.birth, 0);
@@ -10,23 +17,62 @@ function findPopulationBoom(people) {
       dateMap.set(person.death + 1, 0);
     }
     dateMap.set(person.birth, dateMap.get(person.birth) + 1);
-    dateMap.set(person.death + 1, dateMap.get(person.death + 1) + 1);
-
-  }
-  var timeline = sort(Array.from(dateMap.keys()));
+    dateMap.set(person.death + 1, dateMap.get(person.death + 1) - 1);
+  });
+  var timeline = Array.from(dateMap.keys()).sort();
   for (var i = 0; i < timeline.length; i++) {
     curPop += dateMap.get(timeline[i]);
     if (curPop > maxPop) {
       maxPop = curPop;
-      boomRange = 0;
+      boomRange = [];
+      isNewRange = true;
     }
     if (curPop == maxPop) {
-      curRange = [timeline[i], timeline[i + 1 >= timeline.length ? i : i + 1]];
-      boomRange.add(curRange);
+      if (isNewRange) {
+        curRange = [timeline[i]];
+        isNewRange = false;
+      }
+      curRange[1] = timeline[(i + 1 > timeline.length ? i : i + 1)] - 1;
+    } else {
+      if (curRange != null) {
+        boomRange.push(curRange);
+        curRange = null;
+      }
+      isNewRange = true;
     }
   }
   return boomRange;
 }
+
+// 16.10 Tests
+function arraysAreEqual(a1, a2) {
+  if (a1.length != a2.length || a1[0].length != a2[0].length) {
+    return false;
+  }
+  for (var i = 0; i < a1.length; i++) {
+    for (var j = 0; j < a1[0].length; j++) {
+      if (a1[i][j] != a2[i][j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+var tests =
+[
+  [[new Person(1900, 1925), new Person(1910, 1939)], [[1910, 1925]]],
+  [[new Person(1900, 1909), new Person(1910, 1919)], [[1900, 1919]]]
+]
+
+tests.forEach( function (test, index, array) {
+  var boom = findPopulationBoom(test[0]);
+  var result = arraysAreEqual(boom, test[1]);
+  console.log(`16.10 test${index + 1}: ${result}`);
+  if (!result) {
+    console.log(`expected ${test[1]}, but got ${boom}`);
+  }
+});
 
 // 16.17
 function maxSum(array) {
@@ -47,11 +93,11 @@ tests =
   [[1, 2, 3, 4, 5], 15]
 ]
 
-tests.forEach( function (test, index, array) {
-  var sum = maxSum(test[0]);
-  var result = sum == test[1];
-  console.log(`16.17 test${index + 1}: ${result}`);
-});
+// tests.forEach( function (test, index, array) {
+//   var sum = maxSum(test[0]);
+//   var result = sum == test[1];
+//   console.log(`16.17 test${index + 1}: ${result}`);
+// });
 
 // 16.24
 function printAllPairs(a, sum) {
@@ -107,8 +153,8 @@ tests =
   [[0, 0, 0, 0], 1],
   [[-1, 1, 0, 5, 6, 7], 0]
 ]
-tests.forEach( function (test) {
-  console.log(`The array is: ${test[0]}`);
-  console.log(`The sum is: ${test[1]}`);
-  printAllPairs(test[0], test[1]);
-});
+// tests.forEach( function (test) {
+//   console.log(`The array is: ${test[0]}`);
+//   console.log(`The sum is: ${test[1]}`);
+//   printAllPairs(test[0], test[1]);
+// });
