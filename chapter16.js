@@ -7,41 +7,39 @@ class Person {
 }
 
 function findPopulationBoom(people) {
-  var dateMap = new Map();
-  var maxPop = 0, boomRange = [], curPop = 0, curRange, isNewRange = true;
-  people.forEach( function (person) {
-    if (!dateMap.has(person.birth)) {
-      dateMap.set(person.birth, 0);
-    }
-    if (!dateMap.has(person.death + 1)) {
-      dateMap.set(person.death + 1, 0);
-    }
-    dateMap.set(person.birth, dateMap.get(person.birth) + 1);
-    dateMap.set(person.death + 1, dateMap.get(person.death + 1) - 1);
-  });
-  var timeline = Array.from(dateMap.keys()).sort();
+  var yearMap = new Map(), maxBoom = 0, curBoom = 0, boomRange, curBoomRange;
+  people.forEach( function (person) { addPersonToTimeMap(person, yearMap); });
+  var timeline = Array.from(yearMap.keys()).sort();
+
   for (var i = 0; i < timeline.length; i++) {
-    curPop += dateMap.get(timeline[i]);
-    if (curPop > maxPop) {
-      maxPop = curPop;
+    curBoom += yearMap.get(timeline[i]);
+    if (curBoom > maxBoom) {
+      maxBoom = curBoom;
       boomRange = [];
-      isNewRange = true;
+      curBoomRange = null;
     }
-    if (curPop == maxPop) {
-      if (isNewRange) {
-        curRange = [timeline[i]];
-        isNewRange = false;
-      }
-      curRange[1] = timeline[(i + 1 > timeline.length ? i : i + 1)] - 1;
-    } else {
-      if (curRange != null) {
-        boomRange.push(curRange);
-        curRange = null;
-      }
-      isNewRange = true;
+
+    if (curBoom == maxBoom) {
+      curBoomRange = curBoomRange || [timeline[i]];
+      curBoomRange[1] = timeline[(i + 1 > timeline.length ? i : i + 1)] - 1;
+    } else if (curBoomRange != null) {
+      // Population has declined. Add completed range to boomRange.
+      boomRange.push(curBoomRange);
+      curBoomRange = null;
     }
   }
   return boomRange;
+}
+
+function addPersonToTimeMap(person, map) {
+  if (!map.has(person.birth)) {
+    map.set(person.birth, 0);
+  }
+  if (!map.has(person.death + 1)) {
+    map.set(person.death + 1, 0);
+  }
+  map.set(person.birth, map.get(person.birth) + 1);
+  map.set(person.death + 1, map.get(person.death + 1) - 1);
 }
 
 // 16.10 Tests
@@ -93,11 +91,11 @@ tests =
   [[1, 2, 3, 4, 5], 15]
 ]
 
-// tests.forEach( function (test, index, array) {
-//   var sum = maxSum(test[0]);
-//   var result = sum == test[1];
-//   console.log(`16.17 test${index + 1}: ${result}`);
-// });
+tests.forEach( function (test, index, array) {
+  var sum = maxSum(test[0]);
+  var result = sum == test[1];
+  console.log(`16.17 test${index + 1}: ${result}`);
+});
 
 // 16.24
 function printAllPairs(a, sum) {
@@ -153,8 +151,8 @@ tests =
   [[0, 0, 0, 0], 1],
   [[-1, 1, 0, 5, 6, 7], 0]
 ]
-// tests.forEach( function (test) {
-//   console.log(`The array is: ${test[0]}`);
-//   console.log(`The sum is: ${test[1]}`);
-//   printAllPairs(test[0], test[1]);
-// });
+tests.forEach( function (test) {
+  console.log(`The array is: ${test[0]}`);
+  console.log(`The sum is: ${test[1]}`);
+  printAllPairs(test[0], test[1]);
+});
