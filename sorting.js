@@ -73,7 +73,45 @@ function conquer(a, start, end) {
     }
 }
 
+
+function radixSort(a) {
+    var allZeroes = false; //This doesn't really matter; anything > 1 will do.
+    var sigBit = 0, buckets = [];
+    while (!allZeroes) {
+        console.log("FILLING BUCKETS");
+        allZeroes = true;
+        for (var i = 0; i < a.length; i++) {
+            var bucket = Math.floor(a[i] / Math.pow(10, sigBit)) % 10;
+            console.log(`buckets[${bucket}] = ${a[i]}`);
+            if (allZeroes && bucket != 0) {
+                allZeroes = false;
+        	}
+            buckets[bucket] = buckets[bucket] || [];
+            buckets[bucket].push(a[i]);
+        }
+        emptyBuckets(a, buckets);
+        sigBit++;
+    }
+    return a;
+}
+
+function emptyBuckets(a, buckets) {
+    console.log("EMPTYING BUCKETS");
+    var index = 0;
+    for (var i = 0; i < buckets.length; i++) {
+        if (buckets[i]) {
+            buckets[i].forEach(function (num) {
+                console.log(`a[${index}] = ${num}`);
+                a[index++] = num;
+            });
+        }
+    }
+    buckets.length = 0;
+}
+
 var test = [7, 6, 5, 4, 3, 2, 1];
 console.log(mergeSort(test.slice()));
+console.log(radixSort(test.slice()));
 test = [0, 7, 6, 5, 14, 3, 2, 1, 1, 3, 3, 3, 4, 9, 15, 12];
 console.log(mergeSort(test.slice()));
+console.log(radixSort(test.slice()));
