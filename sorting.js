@@ -78,11 +78,11 @@ function radixSort(a) {
     var allZeroes = false; //This doesn't really matter; anything > 1 will do.
     var sigBit = 0, buckets = [];
     while (!allZeroes) {
-        console.log("FILLING BUCKETS");
+        // console.log("FILLING BUCKETS");
         allZeroes = true;
         for (var i = 0; i < a.length; i++) {
             var bucket = Math.floor(a[i] / Math.pow(10, sigBit)) % 10;
-            console.log(`buckets[${bucket}] = ${a[i]}`);
+            // console.log(`buckets[${bucket}] = ${a[i]}`);
             if (allZeroes && bucket != 0) {
                 allZeroes = false;
         	}
@@ -97,12 +97,12 @@ function radixSort(a) {
 }
 
 function emptyBuckets(a, buckets) {
-    console.log("EMPTYING BUCKETS");
+    // console.log("EMPTYING BUCKETS");
     var index = 0;
     for (var i = 0; i < buckets.length; i++) {
         if (buckets[i]) {
             buckets[i].forEach(function (num) {
-                console.log(`a[${index}] = ${num}`);
+                // console.log(`a[${index}] = ${num}`);
                 a[index++] = num;
             });
         }
