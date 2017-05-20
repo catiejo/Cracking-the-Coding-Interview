@@ -86,6 +86,7 @@ function radixSort(a) {
             if (allZeroes && bucket != 0) {
                 allZeroes = false;
         	}
+            bucket += 10; //Accounting for negative numbers.
             buckets[bucket] = buckets[bucket] || [];
             buckets[bucket].push(a[i]);
         }
@@ -110,6 +111,9 @@ function emptyBuckets(a, buckets) {
 }
 
 var test = [7, 6, 5, 4, 3, 2, 1];
+console.log(mergeSort(test.slice()));
+console.log(radixSort(test.slice()));
+test = [10, -6, 5, -14, 15, 12];
 console.log(mergeSort(test.slice()));
 console.log(radixSort(test.slice()));
 test = [0, 7, 6, 5, 14, 3, 2, 1, 1, 3, 3, 3, 4, 9, 15, 12];
