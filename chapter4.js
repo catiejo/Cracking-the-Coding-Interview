@@ -42,6 +42,23 @@ class BinaryNode {
     this.value = value;
   }
 }
+
+class LinkedNode {
+  constructor (value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+LinkedNode.prototype.prettyPrint = function() {
+  var curNode = this, prettified = "";
+  while (curNode != null) {
+    prettified += `${curNode.value} --> `;
+    curNode = curNode.next;
+  }
+  prettified = prettified.substring(0, prettified.length - 5);
+  console.log(prettified);
+}
 /*********************************************************************/
 
 // 4.1
