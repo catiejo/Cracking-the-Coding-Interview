@@ -13,6 +13,12 @@ Node.prototype.addIncomingEdges = function(edges) {
 Node.prototype.addOutgoingEdges = function(edges) {
   this.outgoing = edges;
 }
+
+class BinaryNode {
+  constructor (value) {
+    this.value = value;
+  }
+}
 /*********************************************************************/
 
 // 4.1
@@ -71,3 +77,65 @@ var romance = createRomance();
 console.log(routeExists(romance[0], romance[1]));
 romance = createRomance();
 console.log(routeExists(romance[1], romance[0]));
+
+
+// 4.2
+function createBST(a) {
+  var middle = Math.floor((a.length - 1) / 2);
+  var root = new BinaryNode(a[middle]);
+  growTree(a, 0, middle - 1, root);
+  growTree(a, middle + 1, a.length - 1, root);
+  return root;
+}
+
+function growTree(a, start, end, node) {
+  if (start > end) {
+    return;
+  }
+  var middle = Math.floor((start + end) / 2);
+  var child = new BinaryNode(a[middle]);
+  if (child.value < node.value) {
+    console.log(`${node.value} has ${child.value} on the left`);
+    node.left = child;
+  } else {
+    console.log(`${node.value} has ${child.value} on the right`);
+    node.right = child;
+  }
+  growTree(a, start, middle - 1, child);
+  growTree(a, middle + 1, end, child);
+}
+
+
+// 4.2 Tests
+function prettyPrintTree(root) {
+  var layers = [[root.value], [root.left.value, root.right.value]];
+  var currentQueue = [root.right, root.left], nextQueue = [];
+  var currentNode;
+
+  while (currentQueue.length > 0) {
+    currentNode = currentQueue.pop();
+    if (currentNode.hasOwnProperty('left')) {
+      nextQueue.unshift(currentNode.left);
+    }
+    if (currentNode.hasOwnProperty('right')) {
+      nextQueue.unshift(currentNode.right);
+    }
+    if (currentQueue.length == 0) {
+      var newLayer = [];
+      nextQueue.forEach( function (node) {
+        newLayer.push(node.value);
+      });
+      if (newLayer.length > 0) {
+        layers.push(newLayer.reverse());
+      }
+      currentQueue = nextQueue.slice();
+      nextQueue.length = [];
+    }
+  }
+  layers.forEach(function (layer) {
+    console.log(`[${layer}]`);
+  });
+}
+
+var bst = createBST([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+prettyPrintTree(bst);
