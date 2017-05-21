@@ -26,13 +26,13 @@ function convertToGraph(a) {
     a[i].incoming.forEach( function (index) {
       incoming.push(nodesByIndex[index]);
     });
-    nodes[i].addIncomingEdges(incoming);
+    nodesByIndex[i].addIncomingEdges(incoming);
 
     var outgoing = []
     a[i].outgoing.forEach( function (index) {
       outgoing.push(nodesByIndex[index]);
     });
-    nodes[i].addOutgoingEdges(outgoing);
+    nodesByIndex[i].addOutgoingEdges(outgoing);
   }
   return [nodesByIndex[0], nodesByIndex[nodesByIndex.length - 1]];
 }
