@@ -14,6 +14,29 @@ Node.prototype.addOutgoingEdges = function(edges) {
   this.outgoing = edges;
 }
 
+function convertToGraph(a) {
+  var nodesByIndex = [];
+  // Make nodes
+  for (var i = 0; i < a.length; i++) {
+    nodesByIndex[i] = new Node();
+  }
+  // Add incoming/outgoing
+  for (var i = 0; i < a.length; i++) {
+    var incoming = []
+    a[i].incoming.forEach( function (index) {
+      incoming.push(nodesByIndex[index]);
+    });
+    nodes[i].addIncomingEdges(incoming);
+
+    var outgoing = []
+    a[i].outgoing.forEach( function (index) {
+      outgoing.push(nodesByIndex[index]);
+    });
+    nodes[i].addOutgoingEdges(outgoing);
+  }
+  return [nodesByIndex[0], nodesByIndex[nodesByIndex.length - 1]];
+}
+
 class BinaryNode {
   constructor (value) {
     this.value = value;
@@ -41,43 +64,20 @@ function routeExists(node1, node2) {
 }
 
 // 4.1 Tests
-function createRomance() {
-  var lady = new Node();
-  var tramp = new Node();
-  var kiss = new Node();
-
-  var ladyPup1 = new Node();
-  var ladyPup2 = new Node();
-  var ladyPup3 = new Node();
-  var trampPup1 = new Node();
-  var trampPup2 = new Node();
-
-  lady.addOutgoingEdges([ladyPup1, ladyPup2, ladyPup3]);
-  lady.addIncomingEdges([ladyPup1, ladyPup2]);
-
-  tramp.addOutgoingEdges([trampPup1, trampPup2]);
-  tramp.addIncomingEdges([trampPup1]);
-
-  ladyPup1.addOutgoingEdges([lady, kiss]);
-  ladyPup1.addIncomingEdges([lady]);
-  ladyPup2.addOutgoingEdges([lady]);
-  ladyPup2.addIncomingEdges([lady, kiss]);
-  ladyPup3.addIncomingEdges([lady]);
-
-  trampPup1.addOutgoingEdges([tramp]);
-  trampPup1.addIncomingEdges([tramp, kiss]);
-  trampPup2.addIncomingEdges([tramp]);
-
-  kiss.addOutgoingEdges([ladyPup2, trampPup1]);
-  kiss.addIncomingEdges([ladyPup1]);
-  return [lady, tramp];
-}
-
-var romance = createRomance();
-console.log(routeExists(romance[0], romance[1]));
-romance = createRomance();
-console.log(routeExists(romance[1], romance[0]));
-
+var graph = [
+  {id: 0, incoming: [1, 2], outgoing: [1, 2, 3]},
+  {id: 1, incoming: [0], outgoing: [0, 4]},
+  {id: 2, incoming: [0, 4], outgoing: []},
+  {id: 3, incoming: [0], outgoing: []},
+  {id: 4, incoming: [1], outgoing: [2, 5]},
+  {id: 5, incoming: [4, 7], outgoing: [7]},
+  {id: 6, incoming: [7], outgoing: []},
+  {id: 7, incoming: [5], outgoing: [5, 6]},
+];
+var path = convertToGraph(graph);
+console.log(routeExists(path[0], path[1]));
+path = convertToGraph(graph);
+console.log(routeExists(path[1], path[0]));
 
 // 4.2
 function createBST(a) {
