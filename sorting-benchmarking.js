@@ -19,7 +19,7 @@ function sortInts(a, b) {
   return a - b;
 }
 
-function testAll(test) {
+function testAllSorts(test) {
   if (test.length == 1) {
     test[1] = test[0].slice().sort(sortInts);
   }
@@ -85,6 +85,6 @@ var tests =
   [makeBigTest(-99, 99)],
   [makeBigTest(-99, 99).sort(sortInts)],
   [makeBigTest(-99, 99).sort(sortInts).reverse()]
-]
+];
 
-tests.forEach(testAll);
+tests.forEach(testAllSorts);
