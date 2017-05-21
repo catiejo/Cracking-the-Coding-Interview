@@ -107,12 +107,12 @@ function radixSort(a) {
         // console.log("FILLING BUCKETS");
         allZeroes = true;
         for (var i = 0; i < a.length; i++) {
-            var bucket = Math.floor(a[i] / Math.pow(10, sigBit)) % 10;
+            var bucket = getBucket(a[i], sigBit);
             // console.log(`buckets[${bucket}] = ${a[i]}`);
             if (allZeroes && bucket != 0) {
                 allZeroes = false;
-        	}
-            bucket += 10; //Accounting for negative numbers.
+        	  }
+            bucket += 10; //Accounting for negative buckets.
             buckets[bucket] = buckets[bucket] || [];
             buckets[bucket].push(a[i]);
         }
@@ -134,5 +134,13 @@ function emptyBuckets(a, buckets) {
         }
     }
     buckets.length = 0;
+}
+
+function getBucket(number, sigBit) {
+  // (16, 0) --> 6
+  // (-16, 0) --> -6
+  var isNegative = number < 0;
+  var bucket = Math.floor(Math.abs(number) / Math.pow(10, sigBit)) % 10;
+  return isNegative ? bucket * -1 : bucket;
 }
 
