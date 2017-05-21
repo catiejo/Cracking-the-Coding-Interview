@@ -73,9 +73,29 @@ function conquer(a, start, end) {
     }
 }
 
+/*
+Radix Sort
+-----------------------------------
+Time Complexity Analysis | O(kn)
+-----------------------------------
+This algorithm will sort each element of the array into buckets k times, where
+k is the number of digits of the max value. It will also empty the buckets k
+times, which is also O(n) work. So it does n-work twice for every digit, k,
+simplifying to O(kn).
 
+------------------------------------
+Space Complexity Analysis | O(n)
+------------------------------------
+While radix sort can be used for several different data types, this implementation
+assumes ints. Therefore, there will be a maximum of 19 buckets (from -9 to 9), but
+the maximum memory allocation will be O(n) because arrays in JS are sparse. This
+means only the elements that actually contain data exist in the array, so unused
+buckets do not actually take up any memory. In other languages, you would have to
+allocate 19 buckets so there would be some additional memory overhead, but JS's
+Hashtable implementation of arrays gets rid of this for you.
+*/
 function radixSort(a) {
-    var allZeroes = false; //This doesn't really matter; anything > 1 will do.
+    var allZeroes = false;
     var sigBit = 0, buckets = [];
     while (!allZeroes) {
         // console.log("FILLING BUCKETS");
