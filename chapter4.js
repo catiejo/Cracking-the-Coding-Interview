@@ -1,4 +1,8 @@
 /**************************HELPERS + CLASSES**************************/
+var colors = require('colors');
+var success = "SUCCESS".green;
+var failure = "FAIL".red;
+
 class Node {
   constructor () {
     this.incoming = [];
@@ -81,6 +85,7 @@ function routeExists(node1, node2) {
 }
 
 // 4.1 Tests
+console.log("***** 4.1 *****".cyan);
 var graph = [
   {id: 0, incoming: [1, 2], outgoing: [1, 2, 3]},
   {id: 1, incoming: [0], outgoing: [0, 4]},
@@ -92,9 +97,11 @@ var graph = [
   {id: 7, incoming: [5], outgoing: [5, 6]},
 ];
 var path = convertToGraph(graph);
-console.log(routeExists(path[0], path[1]));
+console.log("There should be a path from 0 to 7");
+console.log((routeExists(path[0], path[1]) ? `--${success}` : `--${failure}`));
 path = convertToGraph(graph);
-console.log(routeExists(path[1], path[0]));
+console.log("There should not be a path from 7 to 0");
+console.log((!routeExists(path[1], path[0]) ? `--${success}` : `--${failure}`));
 
 // 4.2
 function createBST(a) {
@@ -124,35 +131,42 @@ function growTree(a, start, end, node) {
 
 
 // 4.2 Tests
-function prettyPrintTree(root) {
-  var layers = [[root.value], [root.left.value, root.right.value]];
-  var currentQueue = [root.right, root.left], nextQueue = [];
-  var currentNode;
+console.log("***** 4.2 *****".cyan);
+var bst = createBST([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
-  while (currentQueue.length > 0) {
-    currentNode = currentQueue.pop();
-    if (currentNode.hasOwnProperty('left')) {
-      nextQueue.unshift(currentNode.left);
-    }
-    if (currentNode.hasOwnProperty('right')) {
-      nextQueue.unshift(currentNode.right);
-    }
-    if (currentQueue.length == 0) {
-      var newLayer = [];
-      nextQueue.forEach( function (node) {
-        newLayer.push(node.value);
-      });
-      if (newLayer.length > 0) {
-        layers.push(newLayer.reverse());
-      }
-      currentQueue = nextQueue.slice();
-      nextQueue.length = [];
-    }
+// 4.3
+function listOfDepths(root) {
+    var currentTreeNode;
+    var linkedLists = [new LinkedNode(root.value)];
+    var currentDepth = [root], nextDepth = [];
+
+    while (currentDepth.length != 0) {
+        currentTreeNode = currentDepth.pop();
+        if (currentTreeNode.hasOwnProperty('left') && currentTreeNode.left != null) {
+            nextDepth.push(currentTreeNode.left);
+        }
+        if (currentTreeNode.hasOwnProperty('right') && currentTreeNode.right != null) {
+            nextDepth.push(currentTreeNode.right);
+        }
+        if (currentDepth.length == 0 && nextDepth.length != 0) {
+            linkedLists.push(getLinkedFromArray(nextDepth));
+            currentDepth = nextDepth.reverse();
+            nextDepth = [];
+        }
   }
-  layers.forEach(function (layer) {
-    console.log(`[${layer}]`);
-  });
+  return linkedLists;
 }
 
-var bst = createBST([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-prettyPrintTree(bst);
+function getLinkedFromArray(a) {
+  var head = new LinkedNode(a[0].value), curNode = head;
+  for (var i = 1; i < a.length; i++) {
+    curNode.next = new LinkedNode(a[i].value);
+    curNode = curNode.next;
+  }
+  return head;
+}
+
+// 4.3 Tests
+console.log("***** 4.3 *****".cyan);
+var lists = listOfDepths(bst);
+lists.forEach( (l) => l.prettyPrint() );
