@@ -1,3 +1,9 @@
+module.exports = {
+  mergeSort : mergeSort,
+  radixSort : radixSort,
+  quickSort : quickSort
+}
+
 /*
 Merge Sort
 -----------------------------------
@@ -130,12 +136,3 @@ function emptyBuckets(a, buckets) {
     buckets.length = 0;
 }
 
-var test = [7, 6, 5, 4, 3, 2, 1];
-console.log(mergeSort(test.slice()));
-console.log(radixSort(test.slice()));
-test = [10, -6, 5, -14, 15, 12];
-console.log(mergeSort(test.slice()));
-console.log(radixSort(test.slice()));
-test = [0, 7, 6, 5, 14, 3, 2, 1, 1, 3, 3, 3, 4, 9, 15, 12];
-console.log(mergeSort(test.slice()));
-console.log(radixSort(test.slice()));
