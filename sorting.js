@@ -50,32 +50,35 @@ space complexity to be O(n) as it would have one array for the entire life of
 mergeSort().
 */
 function mergeSort(a) {
-    divide(a, 0, a.length - 1);
+    var buffer = [];
+    divide(a, buffer, 0, a.length - 1);
     return a;
 }
 
-function divide(a, start, end) {
+function divide(a, buffer, start, end) {
     if (start < end) {
         var middle = Math.floor((start + end) / 2);
-        divide(a, start, middle);
-        divide(a, middle + 1, end);
-        conquer(a, start, end);
+        divide(a, buffer, start, middle);
+        divide(a, buffer, middle + 1, end);
+        conquer(a, buffer, start, end);
     }
 }
 
-function conquer(a, start, end) {
+function conquer(a, buffer, start, end) {
     var middle = Math.floor((start + end) / 2);
-    var left = a.slice(start, middle + 1);
-    var right = a.slice(middle + 1, end + 1);
+    var left = start, right = middle + 1;
     var sortedIndex = start;
-    while (left.length > 0) {
+    while (left <= middle) {
         var next;
-        if (right.length == 0 || left[0] < right[0]) {
-            next = left.shift();
+        if (right > end || a[left] < a[right]) {
+            next = a[left++];
         } else {
-            next = right.shift()
+            next = a[right++];
         }
-        a[sortedIndex++] = next;
+        buffer[sortedIndex++] = next;
+    }
+    for (var i = start; i < sortedIndex; i++) {
+        a[i] = buffer[i];
     }
 }
 
