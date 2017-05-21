@@ -51,7 +51,7 @@ function testAll(test) {
 function makeBigTest(lowerBound, upperBound) {
   var bigTest = [];
   var randomizer = randomizerWithBound(lowerBound, upperBound);
-  for (var i = 0; i < 175000; i++) {
+  for (var i = 0; i < 1000000; i++) {
     bigTest[i] = randomizer();
   }
   return bigTest;
@@ -69,14 +69,16 @@ var tests =
 [
   [[1, 2, 3, 4], [1, 2, 3, 4]],
   [[4, 3, 2, 1], [1, 2, 3, 4]],
+  [[2, 4, 3, 1], [1, 2, 3, 4]],
   [[2, 4, 3, 2, 1], [1, 2, 2, 3, 4]],
   [[4, -3, 12, 1], [-3, 1, 4, 12]],
   [[], []],
   [[1], [1]],
   [[-1], [-1]],
   [[1, 1, 1, 1], [1, 1, 1, 1]],
-  [makeBigTest(-99, 99)]
+  [makeBigTest(-99, 99)],
+  [makeBigTest(-99, 99).sort(sortInts)],
+  [makeBigTest(-99, 99).sort(sortInts).reverse()]
 ]
 
-// testAll(tests[8]);
 tests.forEach(testAll);
