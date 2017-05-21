@@ -81,17 +81,17 @@ function conquer(a, start, end) {
 
 /*
 Radix Sort
------------------------------------
+--------------------------------
 Time Complexity Analysis | O(kn)
------------------------------------
+--------------------------------
 This algorithm will sort each element of the array into buckets k times, where
 k is the number of digits of the max value. It will also empty the buckets k
 times, which is also O(n) work. So it does n-work twice for every digit, k,
 simplifying to O(kn).
 
-------------------------------------
+--------------------------------
 Space Complexity Analysis | O(n)
-------------------------------------
+--------------------------------
 While radix sort can be used for several different data types, this implementation
 assumes ints. Therefore, there will be a maximum of 19 buckets (from -9 to 9), but
 the maximum memory allocation will be O(n) because arrays in JS are sparse. This
@@ -144,3 +144,49 @@ function getBucket(number, sigBit) {
   return isNegative ? bucket * -1 : bucket;
 }
 
+/*
+Quick Sort
+---------------------------------------------------------------
+Time Complexity Analysis | O(nlogn) average, O(n^2) worst-case
+---------------------------------------------------------------
+Quicksort iterates over recursively smaller subarrays, placing one number in
+its definitive "right" place each loop. In worst case (a reverse sorted list),
+this algorithm performs O(n^2) because it has to swap all elements for each
+element in the list.
+
+That being said, the runtime is typically more like O(nlogn) because of it's
+divide and conquer approach. The swap() function runs in constant time, and
+quickSort is called on average n-1 times (similar reasoning to Merge Sort, described
+above).
+
+--------------------------------
+Space Complexity Analysis | O(1)
+--------------------------------
+This implementation doesn't allocate any memory other than a few pointers
+(partition and pivot), but these are independent of the size of the array.
+Even swapping is done in place. Therefore, quicksort has a fantastic O(1)
+space complexity.
+*/
+function quickSort(a) {
+    quickSortSection(a, 0, a.length - 1);
+    return a;
+}
+
+function quickSortSection(a, start, end) {
+    if (start >= end) {
+        return;
+    }
+    var partition = start, pivot = a[end];
+    for (var i = start; i < end; i++) {
+        if (a[i] < pivot) {
+            swap(a, partition++, i);
+        }
+    }
+    swap(a, partition, end);
+    quickSortSection(a, start, partition - 1);
+    quickSortSection(a, partition + 1, end);
+}
+
+function swap(a, spot1, spot2) {
+    a[spot2] = [a[spot1], a[spot1] = a[spot2]][0];
+}
