@@ -1,7 +1,6 @@
 /**************************HELPERS + CLASSES**************************/
 class Node {
-  constructor (name) {
-    this.name = name;
+  constructor () {
     this.incoming = [];
     this.outgoing = [];
   }
@@ -35,17 +34,17 @@ function routeExists(node1, node2) {
   return false;
 }
 
-// 4.1 tests
+// 4.1 Tests
 function createRomance() {
-  var lady = new Node("lady");
-  var tramp = new Node("tramp");
-  var kiss = new Node("kiss");
+  var lady = new Node();
+  var tramp = new Node();
+  var kiss = new Node();
 
-  var ladyPup1 = new Node("lady's first pup");
-  var ladyPup2 = new Node("lady's second pup");
-  var ladyPup3 = new Node("lady's third pup");
-  var trampPup1 = new Node("tramp's first pup");
-  var trampPup2 = new Node("tramp's second pup");
+  var ladyPup1 = new Node();
+  var ladyPup2 = new Node();
+  var ladyPup3 = new Node();
+  var trampPup1 = new Node();
+  var trampPup2 = new Node();
 
   lady.addOutgoingEdges([ladyPup1, ladyPup2, ladyPup3]);
   lady.addIncomingEdges([ladyPup1, ladyPup2]);
@@ -69,6 +68,6 @@ function createRomance() {
 }
 
 var romance = createRomance();
-console.log(routeExistsBetween(romance[0], romance[1]));
+console.log(routeExists(romance[0], romance[1]));
 romance = createRomance();
-console.log(routeExistsBetween(romance[1], romance[0]));
+console.log(routeExists(romance[1], romance[0]));
