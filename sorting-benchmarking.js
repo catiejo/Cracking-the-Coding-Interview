@@ -46,6 +46,12 @@ function testAll(test) {
   console.timeEnd("Merge Sort")
   var mergeSucess = arraysAreEqual(merged, test[1]);
   console.log(`--> ${mergeSucess ? success : failure}`);
+
+  console.time("Built In Sort")
+  var builtIn = test[0].slice().sort(sortInts);
+  console.timeEnd("Built In Sort")
+  var builtInSuccess = arraysAreEqual(builtIn, test[1]);
+  console.log(`--> ${builtInSuccess ? success : failure}`);
 }
 
 function makeBigTest(lowerBound, upperBound) {
