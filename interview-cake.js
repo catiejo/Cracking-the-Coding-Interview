@@ -16,3 +16,46 @@ function getBestTrade(prices) {
     }
     return bestTrade;
 }
+
+/*
+  #2 | Array of Products
+  Write a function getProductsOfAllIntsExceptAtIndex() that takes an array of
+  integers and returns an array of the products.
+  Example: [1, 7, 3, 4] --> [84, 12, 28, 21]
+*/
+function getProductsOfAllIntsExceptAtIndex (ints) {
+    if (ints.length < 2) {
+        throw new Error("Getting the product of numbers at other indices requires at least 2 numbers");
+    }
+    var products = [], curProduct = 1;
+    for (var i = 0; i < ints.length; i++) {
+        products[i] = curProduct;
+        curProduct *= ints[i];
+    }
+    curProduct = 1;
+    for (var j = ints.length - 1; j >= 0; j--) {
+        products[j] *= curProduct;
+        curProduct *= ints[j];
+    }
+    return products;
+}
+
+// Bonus: What if you could use division?
+function getProductsOfAllIntsExceptAtIndex2 (ints) {
+  var zeroLocations = [], productWithoutZeros = 1, products = [];
+  for (var i = 0; i < ints.length; i++) {
+    if (ints[i] == 0) {
+      zeroLocations.push(i);
+    }
+    productWithoutZeros *= ints[i];
+  }
+  finalProduct = zeroLocations.length == 0 ? productWithoutZeros : 0;
+  for (var j = 0; j < ints.length; j++) {
+    products[j] = finalProduct/ints[j];
+  }
+  if (zeroLocations.length == 1) {
+    products[zeroLocations[0]] = productWithoutZeros;
+  }
+  return products;
+}
+
