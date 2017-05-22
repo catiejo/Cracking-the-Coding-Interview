@@ -184,3 +184,53 @@ function getLinkedFromArray(a) {
 console.log("***** 4.3 *****".cyan);
 var lists = listOfDepths(bst);
 lists.forEach( (l) => l.prettyPrint() );
+
+// 4.4
+function checkIfBalanced(root) {
+  return balanceChecker(root) != -1;
+}
+
+function balanceChecker(root) {
+    if (root == null) {
+      return 0;
+    }
+    var leftHeight = balanceChecker(root.left);
+    var rightHeight = balanceChecker(root.right);
+    if (leftHeight == -1 || rightHeight == -1) {
+      return -1;
+    } else {
+      var balanced = Math.abs(leftHeight - rightHeight) <= 1;
+      return balanced ? 1 + Math.max(leftHeight, rightHeight) : -1;
+    }
+}
+
+// 4.4 Tests
+console.log("***** 4.3 *****".cyan);
+
+var unbalanced = [
+  {id: 0, left: 1, right: 4},
+  {id: 1, left: 2, right: null},
+  {id: 2, left: 3, right: null},
+  {id: 3, left: null, right: null},
+  {id: 4, left: null, right: 5},
+  {id: 5, left: null, right: 6},
+  {id: 6, left: null, right: null}
+];
+unbalanced = convertToTree(unbalanced);
+
+var balanced = [
+  {id: 0, left: 1, right: 4},
+  {id: 1, left: 2, right: 3},
+  {id: 2, left: null, right: null},
+  {id: 3, left: null, right: null},
+  {id: 4, left: 5, right: null},
+  {id: 5, left: null, right: null}
+];
+balanced = convertToTree(balanced);
+
+console.log("Testing an unbalanced tree...");
+console.log((checkIfBalanced(unbalanced) == false ? `--${success}: 'checkIfBalanced' says the tree isn't balanced.` : `--${failure}: 'checkIfBalanced' says the tree is balanced :(`));
+console.log("Now testing a balanced tree...");
+console.log((checkIfBalanced(balanced) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(`));
+console.log("To be safe, let's check an empty tree...");
+console.log((checkIfBalanced(new BinaryNode(0)) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(`));
