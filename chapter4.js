@@ -38,7 +38,21 @@ function convertToGraph(a) {
     });
     nodesByIndex[i].addOutgoingEdges(outgoing);
   }
+  // Assumes point a and b are at the beginning and end of list, respectively
   return [nodesByIndex[0], nodesByIndex[nodesByIndex.length - 1]];
+}
+
+function convertToTree(a) {
+  var nodesByIndex = [];
+  for (var i = 0; i < a.length; i++) {
+    nodesByIndex[i] = new BinaryNode(a[i].id);
+  }
+  a.forEach( function (node) {
+    nodesByIndex[node.id].left = node.left == null ? null : nodesByIndex[node.left];
+    nodesByIndex[node.id].right = node.right == null ? null : nodesByIndex[node.right];
+  });
+  // Assumes root is at the start of the list.
+  return nodesByIndex[0];
 }
 
 class BinaryNode {
