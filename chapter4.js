@@ -45,7 +45,8 @@ function convertToGraph(a) {
 function convertToTree(a) {
   var nodesByIndex = [];
   for (var i = 0; i < a.length; i++) {
-    nodesByIndex[i] = new BinaryNode(a[i].id);
+    var value = a[i].value ? a[i].value : a[i].id;
+    nodesByIndex[i] = new BinaryNode(value);
   }
   a.forEach( function (node) {
     nodesByIndex[node.id].left = node.left == null ? null : nodesByIndex[node.left];
@@ -205,7 +206,7 @@ function balanceChecker(root) {
 }
 
 // 4.4 Tests
-console.log("***** 4.3 *****".cyan);
+console.log("***** 4.4 *****".cyan);
 
 var unbalanced = [
   {id: 0, left: 1, right: 4},
@@ -229,8 +230,78 @@ var balanced = [
 balanced = convertToTree(balanced);
 
 console.log("Testing an unbalanced tree...");
-console.log((checkIfBalanced(unbalanced) == false ? `--${success}: 'checkIfBalanced' says the tree isn't balanced.` : `--${failure}: 'checkIfBalanced' says the tree is balanced :(`));
+console.log((checkIfBalanced(unbalanced) == false ? `--${success}: 'checkIfBalanced' says the tree isn't balanced.\n` : `--${failure}: 'checkIfBalanced' says the tree is balanced :(\n`));
 console.log("Now testing a balanced tree...");
-console.log((checkIfBalanced(balanced) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(`));
+console.log((checkIfBalanced(balanced) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.\n` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(\n`));
 console.log("To be safe, let's check an empty tree...");
-console.log((checkIfBalanced(new BinaryNode(0)) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(`));
+console.log((checkIfBalanced(new BinaryNode(0)) == true ? `--${success}: 'checkIfBalanced' says the tree is balanced.\n` : `--${failure}: 'checkIfBalanced' says the tree isn't balanced :(\n`));
+
+// 4.5
+class BSTValidator {
+  constructor (min, max, isBroken) {
+    this.min = min;
+    this.max = max;
+    this.isBroken = isBroken;
+  }
+}
+
+function verifyBST(root) {
+  var treeValidator = getValidator(root);
+  return !treeValidator.isBroken;
+}
+
+function getValidator(node) {
+  var isBroken = false;
+  var leftValidator, rightValidator;
+  if (node.right != null) {
+    rightValidator = getValidator(node.right);
+    if (node.value > rightValidator.min || rightValidator.isBroken) {
+      isBroken = true;
+    }
+  }
+  if (node.left != null) {
+    leftValidator = getValidator(node.left);
+    if (node.value < leftValidator.max || leftValidator.isBroken) {
+      isBroken = true;
+    }
+  }
+  var min = leftValidator ? leftValidator.min : node.value;
+  var max = rightValidator ? rightValidator.max : node.value;
+  return new BSTValidator(min, max, isBroken);
+}
+
+// 4.5 Tests
+var invalid = [
+  {id: 0, value: 9, left: 1, right: 2,},
+  {id: 1, value: 5, left: 3, right: 4},
+  {id: 2, value: 10, left: 5, right: 6},
+  {id: 3, value: 4, left: null, right: null},
+  {id: 4, value: 12, left: 7, right: 8},
+  {id: 5, value: 8, left: null, right: null},
+  {id: 6, value: 15, left: null, right: null},
+  {id: 7, value: 6, left: null, right: null},
+  {id: 8, value: 13, left: null, right: null}
+];
+invalid = convertToTree(invalid);
+
+var valid = [
+  {id: 0, value: 9, left: 1, right: 2,},
+  {id: 1, value: 5, left: 3, right: 4},
+  {id: 2, value: 10, left: null, right: 5},
+  {id: 3, value: 4, left: null, right: null},
+  {id: 4, value: 7, left: 6, right: 7},
+  {id: 5, value: 15, left: null, right: null},
+  {id: 6, value: 6, left: null, right: null},
+  {id: 7, value: 8, left: null, right: null}
+];
+valid = convertToTree(valid);
+
+console.log("***** 4.3 *****".cyan);
+console.log("Let's start by testing the bst from section 4.2...");
+console.log((verifyBST(bst) == true ? `--${success}: bonafide BST!\n` : `--${failure}: Unfortunately, verfyBST does not think this is a valid tree. :(\n`));
+console.log("And a slightly more complex, but still correct BST...");
+console.log((verifyBST(valid) == true ? `--${success}: bonafide BST!\n` : `--${failure}: Unfortunately, verfyBST does not think this is a valid tree. :(\n`));
+console.log("And an invalid BST...");
+console.log((verifyBST(invalid) == false ? `--${success}: Nothing gets past this algo!\n` : `--${failure}: Unfortunately, verfyBST thinks this is a valid tree. :(\n`));
+console.log("Finally, the case of a single node...");
+console.log((verifyBST(new BinaryNode(7)) == true ? `--${success}: bonafide BST!\n` : `--${failure}: Unfortunately, verfyBST does not think this is a valid tree. :(\n`));
