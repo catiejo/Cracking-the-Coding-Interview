@@ -49,8 +49,14 @@ function convertToTree(a) {
     nodesByIndex[i] = new BinaryNode(value);
   }
   a.forEach( function (node) {
-    nodesByIndex[node.id].left = node.left == null ? null : nodesByIndex[node.left];
-    nodesByIndex[node.id].right = node.right == null ? null : nodesByIndex[node.right];
+    if (node.left != null) {
+      nodesByIndex[node.id].left = nodesByIndex[node.left];
+      nodesByIndex[node.left].parent = nodesByIndex[node.id];
+    }
+    if (node.right != null) {
+      nodesByIndex[node.id].right = nodesByIndex[node.right];
+      nodesByIndex[node.right].parent = nodesByIndex[node.id];
+    }
   });
   // Assumes root is at the start of the list.
   return nodesByIndex[0];
@@ -59,6 +65,9 @@ function convertToTree(a) {
 class BinaryNode {
   constructor (value) {
     this.value = value;
+    this.left = null;
+    this.right = null;
+    this.parent = null;
   }
 }
 
@@ -296,7 +305,7 @@ var valid = [
 ];
 valid = convertToTree(valid);
 
-console.log("***** 4.3 *****".cyan);
+console.log("***** 4.5 *****".cyan);
 console.log("Let's start by testing the bst from section 4.2...");
 console.log((verifyBST(bst) == true ? `--${success}: bonafide BST!\n` : `--${failure}: Unfortunately, verfyBST does not think this is a valid tree. :(\n`));
 console.log("And a slightly more complex, but still correct BST...");
@@ -305,3 +314,34 @@ console.log("And an invalid BST...");
 console.log((verifyBST(invalid) == false ? `--${success}: Nothing gets past this algo!\n` : `--${failure}: Unfortunately, verfyBST thinks this is a valid tree. :(\n`));
 console.log("Finally, the case of a single node...");
 console.log((verifyBST(new BinaryNode(7)) == true ? `--${success}: bonafide BST!\n` : `--${failure}: Unfortunately, verfyBST does not think this is a valid tree. :(\n`));
+
+// 4.6
+function findSuccessor(root) {
+  var minFromSubTree = findMin(root.right);
+  var successor;
+  if (minFromSubTree != null && root.parent != null) {
+    successor = minFromSubTree.value < root.parent.value ? minFromSubTree : root.parent;
+  } else {
+    successor = root.parent == null ? minFromSubTree : root.parent;
+  }
+  return successor;
+}
+
+function findMin(root) {
+  if (root == null || root.left == null) {
+    return root;
+  }
+  return findMin(root.left);
+}
+
+// 4.6 Tests
+var successorTest;
+console.log("***** 4.6 *****".cyan);
+console.log("BST #1");
+successorTest = findSuccessor(bst);
+console.log((successorTest.value == 7 ? `--${success}: correctly returned 7!\n` : `--${failure}: expected 7 but got ${successorTest.value}. :(\n`));
+console.log("BST #2");
+successorTest = findSuccessor(valid);
+console.log((successorTest.value == 10 ? `--${success}: correctly returned 10!\n` : `--${failure}: expected 10 but got ${successorTest.value}. :(\n`));
+console.log("Finally, the case of a single node...");
+console.log((findSuccessor(new BinaryNode(7)) == null ? `--${success}: handled edgecase; returned null!\n` : `--${failure}: expected null but got ${successorTest} :(\n`));
