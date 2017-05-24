@@ -345,3 +345,62 @@ successorTest = findSuccessor(valid);
 console.log((successorTest.value == 10 ? `--${success}: correctly returned 10!\n` : `--${failure}: expected 10 but got ${successorTest.value}. :(\n`));
 console.log("Finally, the case of a single node...");
 console.log((findSuccessor(new BinaryNode(7)) == null ? `--${success}: handled edgecase; returned null!\n` : `--${failure}: expected null but got ${successorTest} :(\n`));
+
+// 4.12
+function findNumPathsWithSum(root, target) {
+  return pathFinder(root, [], target);
+}
+
+function pathFinder(root, sums, target) {
+  if (root == null) {
+    return 0;
+  }
+  var numPaths = 0;
+  sums.push(0);
+  for (var i = 0; i < sums.length; i++) {
+    sums[i] += root.value;
+    if (sums[i] == target) {
+      numPaths++;
+    }
+  }
+  numPaths += pathFinder(root.right, sums, target);
+  numPaths += pathFinder(root.left, sums, target);
+
+  // Remove after recursive call so we can limit memory usage.
+  sums.pop();
+  for (var i = 0; i < sums.length; i++) {
+    sums[i] -= root.value;
+  }
+
+  return numPaths;
+}
+
+// 4.12 Tests
+var sumTest = [
+  {id: 0, value: 2, left: 1, right: 2,},
+  {id: 1, value: 8, left: 3, right: 4},
+  {id: 2, value: -2, left: 5, right: 6},
+  {id: 3, value: 10, left: null, right: null},
+  {id: 4, value: -4, left: 7, right: null},
+  {id: 5, value: 6, left: 8, right: 9},
+  {id: 6, value: 10, left: null, right: null},
+  {id: 7, value: 6, left: null, right: null},
+  {id: 8, value: 4, left: null, right: null},
+  {id: 9, value: 6, left: null, right: null}
+];
+sumTest = convertToTree(sumTest);
+
+console.log("***** 4.12 *****".cyan);
+var numPathsTest;
+console.log("Binary tree with positive and negative numbers, as well as nodes where node.value = target");
+numPathsTest = findNumPathsWithSum(sumTest, 10);
+console.log(( numPathsTest == 8 ? `--${success}: Yes, there were 8 paths found!\n` : `--${failure}: expected 8 paths but found ${numPathsTest}. :(\n`));
+console.log("Same tree, but with unreachable target...");
+numPathsTest = findNumPathsWithSum(sumTest, -10);
+console.log((numPathsTest == 0 ? `--${success}: Yes, there were no paths found!\n` : `--${failure}: expected 0 paths but found ${numPathsTest}. :(\n`));
+console.log("Case of single node that equals target...");
+numPathsTest = findNumPathsWithSum(new BinaryNode(10), 10);
+console.log((numPathsTest == 1 ? `--${success}: Yes, there was 1 path found!\n` : `--${failure}: expected 1 path but found ${numPathsTest}. :(\n`));
+console.log("Empty node just in case...");
+numPathsTest = findNumPathsWithSum(null, 10);
+console.log((numPathsTest == 0 ? `--${success}: Yes, there were no paths found!\n` : `--${failure}: expected 0 paths but found ${numPathsTest}. :(\n`));
