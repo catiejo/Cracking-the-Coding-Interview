@@ -59,3 +59,42 @@ function getProductsOfAllIntsExceptAtIndex2 (ints) {
   return products;
 }
 
+/*
+  #15 | Fibonacci
+  Write a function fib() that a takes an integer nn and returns the
+  nth fibonacci number.
+  Example: 0 -> 0, 1 -> 1, 2 -> 1, 3 -> 3, 4 -> 5 ...
+*/
+function fib(num) {
+    if (num < 2) {
+        return num;
+    }
+    var counter = 2;
+    var fib = 1, fibMinus1 = 1, fibMinus2 = 1;
+    while (counter < num) {
+        fib = fibMinus1 + fibMinus2;
+        fibMinus2 = fibMinus1;
+        fibMinus1 = fib;
+        counter++
+    }
+    return fib;
+}
+
+// Earlier, recursive option. Also technically O(n), but evaluates
+// to (2 * n) - 1 calls in avg. case.
+function recursiveFib(num) {
+    var memo = new Map();
+    memo.set(0, 0);
+    memo.set(1, 1);
+    return tellFib(num, memo);
+}
+
+function tellFib(num, memo) {
+    if (memo.has(num)) {
+        return memo.get(num);
+    }
+    var fib = tellFib(num - 1, memo) + tellFib(num - 2, memo);
+    memo.set(num, fib);
+    return fib;
+}
+
