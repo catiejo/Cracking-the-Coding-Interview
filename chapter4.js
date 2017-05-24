@@ -348,31 +348,33 @@ console.log((findSuccessor(new BinaryNode(7)) == null ? `--${success}: handled e
 
 // 4.12
 function findNumPathsWithSum(root, target) {
-  return pathFinder(root, [], target);
+  return pathFinder(root, target, 0, new Map());
 }
 
-function pathFinder(root, sums, target) {
+function pathFinder(root, targetSum, runningSum, map) {
   if (root == null) {
     return 0;
   }
-  var numPaths = 0;
-  sums.push(0);
-  for (var i = 0; i < sums.length; i++) {
-    sums[i] += root.value;
-    if (sums[i] == target) {
-      numPaths++;
-    }
-  }
-  numPaths += pathFinder(root.right, sums, target);
-  numPaths += pathFinder(root.left, sums, target);
 
-  // Remove after recursive call so we can limit memory usage.
-  sums.pop();
-  for (var i = 0; i < sums.length; i++) {
-    sums[i] -= root.value;
+  runningSum += root.value;
+  // Number of start nodes where sum to current node == targetSum.
+  var numPaths = map.get(runningSum - targetSum) || 0;
+  if (runningSum == targetSum) {
+    // There's also a path from the root.
+    numPaths++;
   }
+
+  incrementMap(map, runningSum, 1);
+  numPaths += pathFinder(root.right, targetSum, runningSum, map);
+  numPaths += pathFinder(root.left, targetSum, runningSum, map);
+  incrementMap(map, runningSum, -1); // Cleaning up after yourself.
 
   return numPaths;
+}
+
+function incrementMap(map, key, inc) {
+  var value = map.get(key);
+  map.set(key, (value != null ? value : 0) + inc);
 }
 
 // 4.12 Tests
