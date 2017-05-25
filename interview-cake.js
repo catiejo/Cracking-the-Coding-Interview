@@ -76,7 +76,7 @@ function fastFib(n) {
         if (bitMap[i] == 1) {
             fib = matrixMult(fib, matrix);
         }
-		matrix = matrixMult(matrix, matrix);
+		    matrix = matrixMult(matrix, matrix);
     }
     return fib[0][1];
 }
@@ -124,4 +124,28 @@ function tellFib(num, memo) {
     memo.set(num, fib);
     return fib;
 }
+
+function benchmarkFib() {
+  var randomizer = randomizerWithBound(1000000, 10000000);
+  for (var i = 0; i < 10; i++) {
+    var fibTest = randomizer();
+    console.log(`Compute the ${fibTest}th fibonacci number`.magenta);
+    console.time("Bottom Up")
+    var bottomUp = fib(fibTest);
+    console.timeEnd("Bottom Up")
+    console.time("Matrix exponentiation")
+    var fast = fastFib(fibTest);
+    console.timeEnd("Matrix exponentiation")
+    console.log();
+  }
+}
+
+function randomizerWithBound(lowerBound, upperBound) {
+  var randomizer = function () {
+    return Math.floor(Math.random() * (upperBound - lowerBound + 1)) + lowerBound;
+  }
+  return randomizer;
+}
+
+benchmarkFib();
 
