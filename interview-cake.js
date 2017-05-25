@@ -1,3 +1,4 @@
+var colors = require('colors');
 /*
   #1 | Trading Apple Stocks
   Write an efficient function that takes stockPricesYesterday and returns
@@ -65,6 +66,31 @@ function getProductsOfAllIntsExceptAtIndex2 (ints) {
   nth fibonacci number.
   Example: 0 -> 0, 1 -> 1, 2 -> 1, 3 -> 3, 4 -> 5 ...
 */
+function fastFib(n) {
+    var bitMap = [], matrix = [[1, 1], [1, 0]], fib = [[1, 0], [0, 1]];
+    while (n > 0) {
+        bitMap.push(n % 2);
+        n >>= 1;
+    }
+    for (var i = 0; i < bitMap.length; i++) {
+        if (bitMap[i] == 1) {
+            fib = matrixMult(fib, matrix);
+        }
+		matrix = matrixMult(matrix, matrix);
+    }
+    return fib[0][1];
+}
+
+// Note: this is not fast enough, but it gets the job done.
+function matrixMult(m1, m2) {
+	var m00 = m1[0][0] * m2[0][0] + m1[0][1] * m2[1][0];
+	var m01 = m1[0][0] * m2[0][1] + m1[0][1] * m2[1][1];
+	var m10 = m1[1][0] * m2[0][0] + m1[1][1] * m2[1][0];
+	var m11 = m1[1][0] * m2[0][1] + m1[1][1] * m2[1][1];
+  return [[m00, m01], [m10, m11]];
+}
+
+// Bottom-up approach. O(n) time, O(1) space.
 function fib(num) {
     if (num < 2) {
         return num;
@@ -81,7 +107,8 @@ function fib(num) {
 }
 
 // Earlier, recursive option. Also technically O(n), but evaluates
-// to (2 * n) - 1 calls in avg. case.
+// to (2 * n) - 1 calls in avg. case. Also O(n) space with hash table
+// and call stack.
 function recursiveFib(num) {
     var memo = new Map();
     memo.set(0, 0);
