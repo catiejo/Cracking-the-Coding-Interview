@@ -142,5 +142,34 @@ nextNumTests.forEach( function (num) {
   var result = nextNum(num);
   console.log(`--Next smallest is "${dec2bin(result[0])}" (${result[0]})`);
   console.log(`--Next largest is "${dec2bin(result[1])}" (${result[1]})`);
+});
 
+// 5.6
+function convert(a, b) {
+  var diff = a^b;
+  var numDiffs = 0;
+  for (var i = diff; i != 0; i&=(i-1)) {
+    numDiffs++;
+  }
+  return numDiffs;
+}
+
+// 5.6 Tests
+console.log("\n***** 5.6 *****".cyan);
+var convertTests = [[29, 15], [0, ~0], [7, 7]];
+convertTests.forEach( function (test) {
+  console.log(`Number of differences between ${dec2bin(test[0])} and ${dec2bin(test[1])} = ${convert(test[0], test[1])}`)
+});
+
+// 5.7
+function swapBits(num) {
+  // MAX_SAFE_INTEGER = Math.pow(2, 54) -1, MIN_SAFE_INTEGER = -(Math.pow(2, 54) - 1)
+  return ((num & 0x15555555555555) << 1) | ((num & 0x2AAAAAAAAAAAAA) >>> 1);
+}
+
+//5.7 Tests
+console.log("\n***** 5.7 *****".cyan);
+var convertTests = [0b10000111, 0b1111, 0b101010];
+convertTests.forEach( function (test) {
+  console.log(`Swap of ${dec2bin(test)} = ${dec2bin(swapBits(test))}`);
 });
