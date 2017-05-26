@@ -167,9 +167,22 @@ function swapBits(num) {
   return ((num & 0x15555555555555) << 1) | ((num & 0x2AAAAAAAAAAAAA) >>> 1);
 }
 
-//5.7 Tests
+// 5.7 Tests
 console.log("\n***** 5.7 *****".cyan);
 var convertTests = [0b10000111, 0b1111, 0b101010];
 convertTests.forEach( function (test) {
   console.log(`Swap of ${dec2bin(test)} = ${dec2bin(swapBits(test))}`);
 });
+
+// 5.8
+function drawLine(screen, width, x1, x2, y) {
+  var startByte = Math.floor(x1 / 4), endByte = Math.floor(x2 / 4);
+  var startBit = x1 % 4;
+  var endBit = 4 - ((x2 % 4) + 1);
+  var row = width * y;
+  for (var i = startByte + 1; i < endByte; i++) {
+    screen[row + i] = 0xFF;
+  }
+  screen[row + startByte] = (0xFF << startBit) & 0xFF;
+  screen[row + endByte] = (0xFF >>> endBit) & 0xFF;
+}
