@@ -176,13 +176,48 @@ convertTests.forEach( function (test) {
 
 // 5.8
 function drawLine(screen, width, x1, x2, y) {
-  var startByte = Math.floor(x1 / 4), endByte = Math.floor(x2 / 4);
-  var startBit = x1 % 4;
-  var endBit = 4 - ((x2 % 4) + 1);
+  var startByte = Math.floor(x1 / 8), endByte = Math.floor(x2 / 8);
   var row = width * y;
   for (var i = startByte + 1; i < endByte; i++) {
     screen[row + i] = 0xFF;
   }
-  screen[row + startByte] = (0xFF << startBit) & 0xFF;
-  screen[row + endByte] = (0xFF >>> endBit) & 0xFF;
+  var startBit = x1 % 8;
+  var endBit = 8 - ((x2 % 8) + 1);
+  screen[row + startByte] |= (0xFF << startBit) & 0xFF;
+  screen[row + endByte] |= 0xFF >>> endBit;
 }
+
+// 5.8 Tests
+function buildScreen(width, height) {
+  var screen = [];
+  for (var i = 0; i < width * height; i++) {
+    screen.push(0x00);
+  }
+  return screen;
+}
+
+function prettyPrintScreen(screen, width) {
+  var numRows = screen.length / width;
+  var rowString = "";
+  for (var row = 0; row < numRows; row++) {
+    for (var i = 0; i < width; i++) {
+      var byte = screen[(row * width) + i];
+      for (var bit = 0; bit < 8; bit++) {
+        rowString += (byte & (1 << bit)) == 0 ? " 0 " : " 1 ";
+      }
+      rowString += " | "
+    }
+    console.log(rowString);
+    rowString = "";
+  }
+}
+
+console.log("\n***** 5.8 *****".cyan);
+var display = buildScreen(5, 5);
+console.log("before".magenta);
+prettyPrintScreen(display, 5);
+drawLine(display, 5, 3, 17, 2);
+drawLine(display, 5, 7, 23, 4);
+drawLine(display, 5, 12, 30, 4);
+console.log("after".magenta);
+prettyPrintScreen(display, 5);
