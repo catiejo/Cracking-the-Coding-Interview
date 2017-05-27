@@ -181,10 +181,14 @@ function drawLine(screen, width, x1, x2, y) {
   for (var i = startByte + 1; i < endByte; i++) {
     screen[row + i] = 0xFF;
   }
-  var startBit = x1 % 8;
-  var endBit = 8 - ((x2 % 8) + 1);
-  screen[row + startByte] |= (0xFF << startBit) & 0xFF;
-  screen[row + endByte] |= 0xFF >>> endBit;
+  var startMask = (0xFF << (x1 % 8)) & 0xFF;
+  var endMask = 0xFF >>> (8 - ((x2 % 8) + 1));
+  if (startByte == endByte) {
+    screen[row + startByte] |= startMask & endMask;
+  } else {
+    screen[row + startByte] |= startMask;
+    screen[row + endByte] |= endMask;
+  }
 }
 
 // 5.8 Tests
@@ -219,5 +223,6 @@ prettyPrintScreen(display, 5);
 drawLine(display, 5, 3, 17, 2);
 drawLine(display, 5, 7, 23, 4);
 drawLine(display, 5, 12, 30, 4);
+drawLine(display, 5, 4, 7, 3);
 console.log("after".magenta);
 prettyPrintScreen(display, 5);
