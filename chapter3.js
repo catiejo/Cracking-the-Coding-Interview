@@ -14,7 +14,7 @@ the other stacks isn't, you shift the elements in the next stack over by 1 (and
 reduce its capacity by one) to accommodate the other stack. However, in my mind this
 makes pushing to a full array a really expensie operation. Also, the indices are
 modulo-ed so you can extend a stack that starts in the back of the array by over-
-flowing to the beginning (hence, circuluar). 
+flowing to the beginning (hence, circuluar).
 
 Second, you could interleave the indexes. So for example, pushing to stack 1 would
 push to indices 0, 3, 6, etc, stack 2 to indices 1, 4, 7, and stack 3 to 2, 5, 8.
@@ -79,3 +79,85 @@ minStackTests.forEach( function (test) {
     console.log(`--Popping ${pop}. Min is ${minStack.peekMins()}.`);
   }
 });
+
+// 3.3
+class SetOfStacks {
+  constructor (stackSize) {
+    if (stackSize <= 0) {
+      throw new Error("Error: stack size must be at least 1.");
+    }
+    this.setOfStacks = [];
+    this.stackSize = stackSize;
+    this.curStack = -1;
+  }
+}
+
+SetOfStacks.prototype.push = function (item) {
+  if (this.setOfStacks.length == 0 || this.setOfStacks[this.curStack].length == this.stackSize) {
+    this.setOfStacks.push([]);
+    this.curStack++;
+  }
+  this.setOfStacks[this.curStack].push(item);
+}
+
+SetOfStacks.prototype.pop = function () {
+  var pop = this.curStack >= 0 ? this.setOfStacks[this.curStack].pop() : null;
+  if (this.curStackIsEmpty()) {
+    this.curStack = Math.max(this.curStack - 1, -1);
+    this.setOfStacks.pop(); // Returns undefined if already empty.
+  }
+  return pop;
+}
+
+SetOfStacks.prototype.popAt = function (index) {
+  if (!this.setOfStacks[index]) {
+    return null;
+  }
+  var pop = this.setOfStacks[index].pop();
+  if (this.setOfStacks[index].length == 0) {
+    this.setOfStacks.splice(index, 1);
+    this.curStack = Math.max(this.curStack - 1, -1);
+  }
+  return pop;
+}
+
+SetOfStacks.prototype.isEmpty = function () {
+  return this.setOfStacks.length == 0;
+}
+
+SetOfStacks.prototype.curStackIsEmpty = function () {
+  return this.curStack < 0 || this.setOfStacks[this.curStack].length == 0;
+}
+
+// 3.3 Tests
+console.log("\n***** 3.2 *****".cyan);
+console.log(`Testing SetOfStacks with [0-9]`.magenta)
+var stack = new SetOfStacks(3);
+for (var i = 0; i < 10; i++) {
+  stack.push(i);
+}
+console.log(`Completed stack is: ${JSON.stringify(stack.setOfStacks)}`);
+console.log("---------------------");
+while (!stack.isEmpty()) {
+  var pop = stack.pop();
+  console.log(`--Popping ${pop}.`);
+}
+console.log(`Testing popAt with [0-12]`.magenta);
+var stack = new SetOfStacks(3);
+for (var i = 0; i < 13; i++) {
+  stack.push(i);
+}
+console.log(`Completed stack is: ${JSON.stringify(stack.setOfStacks)}`);
+console.log("---------------------");
+console.log(`--Popping from stack 4: ${stack.popAt(4)}.`);
+console.log(`--Popping from stack 4: ${stack.popAt(4)}.`);
+console.log(`--Popping from stack 3: ${stack.popAt(3)}.`);
+console.log(`--Popping from stack 2: ${stack.popAt(2)}.`);
+console.log(`--Popping from stack 1: ${stack.popAt(1)}.`);
+console.log(`Altered stack is: ${JSON.stringify(stack.setOfStacks)}`);
+console.log("---------------------");
+console.log("Clearing the rest of the stack...")
+while (!stack.isEmpty()) {
+  var pop = stack.pop();
+  console.log(`--Popping ${pop}.`);
+}
