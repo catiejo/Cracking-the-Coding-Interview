@@ -59,6 +59,14 @@ MinStack.prototype.peekMins = function () {
   return this.mins.length > 0 ? this.mins[this.mins.length - 1] : null;
 }
 
+MinStack.prototype.peek = function () {
+  return this.stack.length > 0 ? this.stack[this.stack.length - 1] : null;
+}
+
+MinStack.prototype.size = function () {
+  return this.stack.length;
+}
+
 MinStack.prototype.isEmpty = function () {
   return this.stack.length == 0;
 }
@@ -144,7 +152,7 @@ while (!stack.isEmpty()) {
 }
 console.log(`Testing popAt with [0-12]`.magenta);
 var stack = new SetOfStacks(3);
-for (var i = 0; i < 13; i++) {
+for (var i = 1; i < 14; i++) {
   stack.push(i);
 }
 console.log(`Completed stack is: ${JSON.stringify(stack.setOfStacks)}`);
@@ -160,4 +168,59 @@ console.log("Clearing the rest of the stack...")
 while (!stack.isEmpty()) {
   var pop = stack.pop();
   console.log(`--Popping ${pop}.`);
+}
+console.log(`--Popping from empty stack of stacks: ${stack.pop()}.`);
+
+// 3.4
+class MyQueue {
+  constructor() {
+    this.enqStack = new MinStack(); // Using already-implemented MinStack b/c why not.
+    this.deqStack = new MinStack();
+  }
+}
+
+MyQueue.prototype.enqueue = function (item) {
+  this.enqStack.push(item);
+}
+
+MyQueue.prototype.dequeue = function () {
+  if (this.deqStack.isEmpty()) {
+    this.flipStacks();
+  }
+  return this.deqStack.pop();
+}
+
+MyQueue.prototype.peek = function () {
+  if (this.deqStack.isEmpty()) {
+    this.flipStacks();
+  }
+  return this.deqStack.peek();
+}
+
+MyQueue.prototype.flipStacks = function () {
+  while (!this.enqStack.isEmpty()) {
+    this.deqStack.push(this.enqStack.pop());
+  }
+}
+
+MyQueue.prototype.size = function () {
+  return this.deqStack.size() + this.enqStack.size();
+}
+
+// 3.4 Tests
+console.log("\n***** 3.2 *****".cyan);
+var queue = new MyQueue();
+for (var i = 0; i < 10; i++) {
+  console.log(`Queueing ${i}`.green);
+  queue.enqueue(i);
+}
+for (var i = 0; i < 7; i++) {
+  console.log(`Dequeueing ${queue.dequeue()}`.red);
+}
+for (var i = 10; i < 15; i++) {
+  console.log(`Queueing ${i}`.green);
+  queue.enqueue(i);
+}
+while (queue.size() > 0) {
+  console.log(`Dequeueing ${queue.dequeue()}`.red);
 }
