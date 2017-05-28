@@ -1,3 +1,7 @@
+require('colors');
+var success = "SUCCESS".green;
+var fail = "OOPS".red;
+
 // 3.1
 /*
 There are three ways I can think of to implement multiple stacks with a single array.
@@ -27,3 +31,51 @@ and whenever an element is popped, that object would have a prevIndex property
 that tells you where to find it's previous member in the array. This doesn't
 really have a huge advantage over just using three linked lists in my mind, though.
 */
+
+// 3.2
+class MinStack {
+  constructor() {
+    this.stack = [];
+    this.mins = [];
+  }
+}
+
+MinStack.prototype.push = function (item) {
+  this.stack.push(item);
+  if (this.peekMins() == null || item <= this.peekMins()) {
+    this.mins.push(item);
+  }
+}
+
+MinStack.prototype.pop = function () {
+  var pop = this.stack.pop();
+  if (pop != null && pop == this.peekMins()) {
+    this.mins.pop();
+  }
+  return pop != null ? pop : null;
+}
+
+MinStack.prototype.peekMins = function () {
+  return this.mins.length > 0 ? this.mins[this.mins.length - 1] : null;
+}
+
+MinStack.prototype.isEmpty = function () {
+  return this.stack.length == 0;
+}
+
+// 3.2 Tests
+var minStackTests = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 2, 1, 2, 1], [0, -1, 15, -4, 0]];
+console.log("\n***** 3.2 *****".cyan);
+minStackTests.forEach( function (test) {
+  console.log(`Testing minStack with [${test}]`.magenta)
+  var minStack = new MinStack();
+  test.forEach( (num) => {
+    minStack.push(num);
+    console.log(`--Pushing ${num}. Min is ${minStack.peekMins()}.`);
+  });
+  console.log("---------------------");
+  while (!minStack.isEmpty()) {
+    var pop = minStack.pop();
+    console.log(`--Popping ${pop}. Min is ${minStack.peekMins()}.`);
+  }
+});
