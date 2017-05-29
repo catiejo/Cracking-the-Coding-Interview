@@ -155,15 +155,27 @@ public class chapter8 : MonoBehaviour {
 		return nums [middle] > middle ? FindMagic (nums, start, middle - 1) : FindMagic (nums, middle + 1, end);
 	}
 	public int FindMagicIndexWithDupes(int[] nums) {
-		for (var i = 0; i < nums.Length; i++) {
-			if (nums [i] == i) {
-				return i;
-			}
-			if (nums [i] > i) {
-				i = nums [i] - 1; // -1 because loop is i++
-			}
+		return FindMagicWithDupes (nums, 0, nums.Length - 1);
+	}
+	private int FindMagicWithDupes(int[] nums, int start, int end) {
+		if (start > end) {
+			return -1;
 		}
-		return -1;
+		int middle = (start + end) / 2;
+		if (nums [middle] == middle) {
+			return middle;
+		}
+		// Search Left Side
+		var leftEnd = Mathf.Min(middle - 1, nums[middle]);
+		var leftMagic = FindMagicWithDupes (nums, start, leftEnd);
+		if (leftMagic >= 0) {
+			return leftMagic;
+		}
+
+		// Search Right Side
+		var rightStart = Mathf.Max(middle + 1, nums[middle]);
+		var rightMagic = FindMagicWithDupes (nums, rightStart, end);
+		return rightMagic;
 	}
 
 	public void TestFindMagicIndex(Button button) {
