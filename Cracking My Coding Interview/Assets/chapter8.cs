@@ -139,4 +139,87 @@ public class chapter8 : MonoBehaviour {
 		}
 		Debug.Log (pathString);
 	}
+
+	// 8.3
+	public int FindMagicIndex(int[] nums) {
+		return FindMagic (nums, 0, nums.Length - 1);
+	}
+	private int FindMagic(int[] nums, int start, int end) {
+		if (start > end) {
+			return -1;
+		}
+		int middle = (start + end) / 2;
+		if (nums [middle] == middle) {
+			return middle;
+		}
+		return nums [middle] > middle ? FindMagic (nums, start, middle - 1) : FindMagic (nums, middle + 1, end);
+	}
+	public int FindMagicIndexWithDupes(int[] nums) {
+		for (var i = 0; i < nums.Length; i++) {
+			if (nums [i] == i) {
+				return i;
+			}
+			if (nums [i] > i) {
+				i = nums [i] - 1; // -1 because loop is i++
+			}
+		}
+		return -1;
+	}
+
+	public void TestFindMagicIndex(Button button) {
+		var allGood = true;
+		var magic = new int[] { -10, 0, 1, 2, 4, 6, 7, 8, 9, 10, 11 };
+		var muggle = new int[] { -10, 0, 1, 2, 5, 6, 7, 8, 9, 10, 11 };
+
+		var magicDupes = new int[] { 3, 3, 4, 6, 6, 6, 6, 8 };
+		var muggleDupes = new int[] { -3, -3, 4, 10, 10 };
+		var muggleUgly = new int[] { -1, 0, 1, 2, 3, 4 };
+
+		var magicResult = FindMagicIndex (magic);
+		if (magicResult == 4) {
+			Debug.Log ("Magic index is " + magicResult);
+		} else {
+			Debug.LogError ("Magic index failed! Expected 4, but returned " + magicResult);
+			allGood = false;
+		}
+		var muggleResult = FindMagicIndex (muggle);
+		if (muggleResult == -1) {
+			Debug.Log ("Muggle index is " + muggleResult);
+		} else {
+			Debug.LogError ("Muggle index failed! Expected -1, but returned " + muggleResult);
+			allGood = false;
+		}
+
+		var magicDupesResult = FindMagicIndexWithDupes (magicDupes);
+		if (magicDupesResult == 6) {
+			Debug.Log ("Magic dupes index is " + magicDupesResult);
+		} else {
+			Debug.LogError ("Magic dupes failed! Expected 6, but returned " + magicDupesResult);
+			allGood = false;
+		}
+
+		var muggleDupesResult = FindMagicIndexWithDupes (muggleDupes);
+		if (muggleDupesResult == -1) {
+			Debug.Log ("Muggle dupes index is " + muggleDupesResult);
+		} else {
+			Debug.LogError ("Muggle dupes failed! Expected 6, but returned " + muggleDupesResult);
+			allGood = false;
+		}
+
+		var muggleUglyResult = FindMagicIndexWithDupes (muggleUgly);
+		if (muggleUglyResult == -1) {
+			Debug.Log ("Muggle ugly index is " + muggleUglyResult);
+		} else {
+			Debug.LogError ("Magic index failed! Expected -1, but returned " + muggleUglyResult);
+			allGood = false;
+		}
+
+
+		if (allGood) {
+			button.GetComponent<Image> ().color = Color.green;
+		} else {
+			button.GetComponent<Image> ().color = Color.red;
+		}
+
+	}
 }
