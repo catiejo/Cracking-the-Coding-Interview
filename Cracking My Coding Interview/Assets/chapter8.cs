@@ -62,7 +62,6 @@ public class chapter8 : MonoBehaviour {
 		while (stack.Count != 0) {
 			Pos nextRobo;
 			var robo = stack.Peek ();
-			Debug.Log ("Processing " + robo.ToString ());
 			nextRobo = TryGoRight (robo, map);
 			if (nextRobo == null) {
 				nextRobo = TryGoDown (robo, map);
@@ -82,28 +81,16 @@ public class chapter8 : MonoBehaviour {
 	}
 
 	private bool ReachedEnd(Pos robo, bool[,] map) {
-		Debug.Log (robo.x + " == " + (map.GetLength (1) - 1) + " && " + robo.y + " == " + (map.GetLength (0) - 1));
-		if (robo.x == (map.GetLength (1) - 1) && robo.y == (map.GetLength(0) - 1)) {
-			Debug.LogWarning ("You've arrived");
-		} else {
-			Debug.LogWarning ("dead end");
-		}
 		return robo.x == (map.GetLength (1) - 1) && robo.y == (map.GetLength(0) - 1);
 	}
 
 	private Pos TryGoRight(Pos robo, bool[,] map) {
 		var canGoRight = robo.x < (map.GetLength(1) - 1) && map [robo.y, robo.x + 1];
-		if (canGoRight) {
-			Debug.LogWarning ("Going right");
-		}
 		return canGoRight ? new Pos (robo.x + 1, robo.y) : null;
 	}
 
 	private Pos TryGoDown(Pos robo, bool[,] map) {
 		var canGoDown = robo.y < (map.GetLength(0) - 1) && map [robo.y + 1, robo.x];
-		if (canGoDown) {
-			Debug.LogWarning ("Going down");
-		}
 		return canGoDown ? new Pos (robo.x, robo.y + 1) : null;
 	}
 
@@ -150,6 +137,6 @@ public class chapter8 : MonoBehaviour {
 		foreach (var coord in path) {
 			pathString += coord.ToString () + " ";
 		}
-		Debug.LogError (pathString);
+		Debug.Log (pathString);
 	}
 }
