@@ -192,6 +192,7 @@ function isOneAway(str1, str2) {
 
 // 1.5 Related problem (not from the book)
 // Find the (Levenshtein) edit distance between two strings.
+//FIXME
 function stringEditDistance(str1, str2) {
   var shorter, longer, i;
   if (str1.length > str2.length) {

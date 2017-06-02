@@ -149,3 +149,42 @@ function randomizerWithBound(lowerBound, upperBound) {
 
 benchmarkFib();
 
+
+function createMemo(x, y) {
+    var memo = new Array(x);
+    for (var i = 0; i < x; i++) {
+        memo[i] = new Array(y);
+    }
+    return memo;
+}
+
+function makeChange(amt, denoms) {
+    var memo = createMemo(amt, denoms.length);
+    denoms = denoms.sort()
+    if (amt <= 0 || denoms.length == 0) {
+        throw new Error("You don't have any money!");
+    }
+    var total = getNumCombos(amt, denoms, memo);
+    return total;
+}
+
+function getNumCombos(amt, denoms, memo, memoRowSize) {
+    var total = 0;
+    if (amt == 0) {
+        return 1;
+    } else if (amt < denoms[0]) {
+        return 0;
+    }
+    if (memo[amt - 1][denoms.length - 1] != null) {
+        return memo[amt - 1][denoms.length - 1];
+    }
+
+    for (var i = 0; i < denoms.length; i++) {
+        if (amt >= denoms[i]) {
+    		totalCallsAscending++;
+        	total += getNumCombos(amt - denoms[i], denoms.slice(i), memo, memoRowSize);
+        }
+    }
+    memo[amt - 1][denoms.length - 1] = total;
+    return total;
+}
