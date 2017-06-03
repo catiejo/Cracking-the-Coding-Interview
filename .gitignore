@@ -11,3 +11,4 @@ obj
 *.csproj
 *.sln
 *.apk
+.ipynb_checkpoints
