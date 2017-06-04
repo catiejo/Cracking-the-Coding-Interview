@@ -138,7 +138,7 @@ SetOfStacks.prototype.curStackIsEmpty = function () {
 }
 
 // 3.3 Tests
-console.log("\n***** 3.2 *****".cyan);
+console.log("\n***** 3.3 *****".cyan);
 console.log(`Testing SetOfStacks with [0-9]`.magenta)
 var stack = new SetOfStacks(3);
 for (var i = 0; i < 10; i++) {
@@ -208,7 +208,7 @@ MyQueue.prototype.size = function () {
 }
 
 // 3.4 Tests
-console.log("\n***** 3.2 *****".cyan);
+console.log("\n***** 3.4 *****".cyan);
 var queue = new MyQueue();
 for (var i = 0; i < 10; i++) {
   console.log(`Queueing ${i}`.green);
@@ -224,3 +224,79 @@ for (var i = 10; i < 15; i++) {
 while (queue.size() > 0) {
   console.log(`Dequeueing ${queue.dequeue()}`.red);
 }
+
+// 3.5
+class Stack {
+  constructor() {
+    this.stack = [];
+  }
+}
+
+Stack.prototype.push = function (item) {
+  this.stack.push(item);
+}
+
+Stack.prototype.pop = function () {
+  if (this.isEmpty()) {
+    return null
+  }
+  return this.stack.pop();
+}
+
+Stack.prototype.peek = function () {
+  return this.isEmpty() ? null : this.stack[this.stack.length - 1];
+}
+
+Stack.prototype.size = function () {
+  return this.stack.length;
+}
+
+Stack.prototype.isEmpty = function () {
+  return this.stack.length == 0;
+}
+
+Stack.prototype.toString = function () {
+  return this.stack.toString();
+}
+
+function makeStackFromArray(a) {
+  var stack = new Stack();
+  stack.stack = a
+  return stack;
+}
+
+function sortStack(stack) {
+  var sorted = new Stack();
+  if (stack.isEmpty()) {
+    return sorted;
+  }
+  sorted.push(stack.pop());
+  while (!stack.isEmpty()) {
+    if (stack.peek() <= sorted.peek()) {
+      sorted.push(stack.pop());
+    } else {
+      var tmp = stack.pop();
+      while (!sorted.isEmpty() && sorted.peek() < tmp) {
+        stack.push(sorted.pop());
+      }
+      sorted.push(tmp);
+    }
+  }
+  return sorted;
+}
+
+// 3.5 Tests
+console.log("\n***** 3.5 *****".cyan);
+var sortedStackTests = [
+  [1, 2, 3, 4, 5],
+  [5, 4, 3, 2, 1],
+  [5, 2, 1, 3, 4],
+  [5, 3, 5, 2, 1],
+  [5],
+  [],
+];
+sortedStackTests.forEach(function(test) {
+  console.log(`Testing sortStack with [${test}]`.magenta);
+  var result = sortStack(makeStackFromArray(test));
+  console.log(`--[${result}]`);
+});
