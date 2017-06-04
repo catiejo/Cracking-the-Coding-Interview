@@ -144,6 +144,11 @@ nextNumTests.forEach( function (num) {
   console.log(`--Next largest is "${dec2bin(result[1])}" (${result[1]})`);
 });
 
+// 5.5
+/*
+  (n & (n - 1)) == 0 checks whether n is a power of two.
+*/
+
 // 5.6
 function convert(a, b) {
   var diff = a^b;
@@ -154,7 +159,6 @@ function convert(a, b) {
   return numDiffs;
 }
 
-// 5.6 Tests
 console.log("\n***** 5.6 *****".cyan);
 var convertTests = [[29, 15], [0, ~0], [7, 7]];
 convertTests.forEach( function (test) {
@@ -167,7 +171,6 @@ function swapBits(num) {
   return ((num & 0x15555555555555) << 1) | ((num & 0x2AAAAAAAAAAAAA) >>> 1);
 }
 
-// 5.7 Tests
 console.log("\n***** 5.7 *****".cyan);
 var convertTests = [0b10000111, 0b1111, 0b101010];
 convertTests.forEach( function (test) {
@@ -191,7 +194,6 @@ function drawLine(screen, width, x1, x2, y) {
   }
 }
 
-// 5.8 Tests
 function buildScreen(width, height) {
   var screen = [];
   for (var i = 0; i < width * height; i++) {
