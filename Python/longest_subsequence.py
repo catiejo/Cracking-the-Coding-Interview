@@ -3,6 +3,18 @@ Writing code to compute substring from dynamic programming array mentioned in th
 https://youtu.be/NnD96abizww
 '''
 
+def longest_subsequence(a, b):
+    sub_array = [[0] * (len(a) + 1) for i in range(len(b) + 1)]
+    for row in range(1, len(sub_array)):
+        for col in range(1, len(sub_array[0])):
+            if a[col - 1] == b[row - 1]:
+                sub_array[row][col] = sub_array[row - 1][col - 1] + 1
+            else:
+                sub_array[row][col] = max(sub_array[row - 1][col], sub_array[row][col - 1])
+    print_array(sub_array, a, b)
+    subseq = get_subseq(sub_array, a, b)
+    return (sub_array[len(b)][len(a)], subseq)
+
 def get_subseq(array, a, b):
     a, b = (a, b) if (len(b) + 1) == len(array) else (b, a)
     subseq = ""
@@ -17,15 +29,12 @@ def get_subseq(array, a, b):
             x, y = x - 1, y - 1
     return subseq[::-1]
 
-my_sub_array = \
-   [[0, 0, 0, 0, 0, 0, 0], \
-    [0, 1, 1, 1, 1, 1, 1], \
-    [0, 1, 1, 2, 2, 2, 2], \
-    [0, 1, 2, 2, 2, 2, 2], \
-    [0, 1, 2, 3, 3, 3, 3], \
-    [0, 1, 2, 3, 3, 3, 4]]
-    
-class Runner:
-    def run_test():
-        print(get_subseq(my_sub_array, "acbcf", "abcdaf"))        
-        print(get_subseq(my_sub_array, "abcdaf", "acbcf"))
+def print_array(array, col_marker, row_marker):
+    print("     ", "  ".join(col_marker))
+    for i, row in enumerate(array):
+        prefix = row_marker[i - 1] if i > 0 else " "
+        print(prefix, row)
+
+#class Runner:
+#    def run_test():
+print(longest_subsequence("abcdaf", "acbcf"))
