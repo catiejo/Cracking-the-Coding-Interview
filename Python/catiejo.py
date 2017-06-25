@@ -1,4 +1,5 @@
 import math
+import random
 
 def get_parent(index):
     return index // 2
@@ -65,3 +66,17 @@ class MinHeap:
     def is_empty(self):
         """ Checks if the heap is empty. """
         return len(self.__heap) == 0
+
+def test_heap():
+    my_heap = MinHeap()
+
+    print("***Generate the Heap***")
+    for num in random.sample(range(100), 10):
+        print("--adding", num)
+        tup = (num, num)
+        my_heap.push(tup)
+
+    print("***Culling the Heap***")
+    while not my_heap.is_empty():
+        value = my_heap.pop()[0]
+        print("--removing", value)
