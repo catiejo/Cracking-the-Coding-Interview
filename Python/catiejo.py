@@ -1,6 +1,16 @@
 import math
 import random
 
+class Color:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def get_parent(index):
     return index // 2
 def get_left(index):
@@ -80,3 +90,37 @@ def test_heap():
     while not my_heap.is_empty():
         value = my_heap.pop()[0]
         print("--removing", value)
+        
+class QueueWithStacks:
+    def __init__(self):
+        self.__enq = []
+        self.__deq = []
+    
+    def enqueue(self, item):
+        self.__enq.append(item)
+    
+    def dequeue(self):
+        if len(self.__deq) == 0:
+            self.__shift_stacks()
+        return self.__deq.pop() if len(self.__deq) else None # Could also raise error.
+    
+    def __shift_stacks(self):
+        while len(self.__enq):
+            self.__deq.append(self.__enq.pop())
+    
+    def __len__(self):
+        return len(self.__enq) + len(self.__deq)
+
+def test_queue_with_stacks(stack_size):
+    my_stack = QueueWithStacks()
+    
+    for num in range(stack_size):
+        print(Color.WARNING, "--enqueueing", num, Color.ENDC)
+        my_stack.enqueue(num)
+        if num > (stack_size // 2):
+            dq = my_stack.dequeue()
+            print(Color.OKBLUE, "--dequeueing", dq, Color.ENDC)
+    
+    while len(my_stack):
+        dq = my_stack.dequeue()
+        print(Color.OKBLUE, "--dequeueing", dq, Color.ENDC)
